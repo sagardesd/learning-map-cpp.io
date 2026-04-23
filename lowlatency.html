@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Low-Latency C++ Series — Reading List</title>
+  <style>
+    :root {
+      --bg-primary: #0f0c29;
+      --bg-secondary: #1a1a3e;
+      --bg-card: #1c1c3a;
+      --bg-input: #12122a;
+      --text-primary: #e0e0e0;
+      --text-secondary: #8899aa;
+      --text-muted: #556677;
+      --border: #2a2a50;
+      --success: #2ecc71;
+      --danger: #e74c3c;
+
+      /* Low Latency Specific Theme Colors */
+      --module1: #e74c3c; --module1-dim: #e74c3c30; /* CPU & Arch */
+      --module2: #e67e22; --module2-dim: #e67e2230; /* Memory Layout */
+      --module3: #f1c40f; --module3-dim: #f1c40f30; /* Concurrency */
+      --module4: #2ecc71; --module4-dim: #2ecc7130; /* Containers/STL */
+      --module5: #3498db; --module5-dim: #3498db30; /* Patterns */
+      --module6: #9b59b6; --module6-dim: #9b59b630; /* Profiling */
+      --module7: #00b894; --module7-dim: #00b89430; /* I/O & Kernel */
+      --action-color: #3498db;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(170deg, var(--bg-primary), var(--bg-secondary), var(--bg-primary));
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    /* ─── Navigation Link Back to Home ─── */
+    .back-home {
+      display: inline-flex; align-items: center; margin-top: 10px; margin-bottom: 10px;
+      color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; font-weight: 600;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .back-home:hover { color: var(--text-primary); transform: translateX(-4px); }
+
+    /* ─── Header ─── */
+    header { text-align: center; padding: 30px 20px 30px; }
+    header h1 {
+      font-size: 2.2rem;
+      background: linear-gradient(90deg, #e74c3c, #f1c40f, #3498db);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+    header p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* ─── Controls bar ─── */
+    .controls { display: flex; justify-content: center; gap: 12px; margin: 20px 0 30px; flex-wrap: wrap; }
+    .controls button {
+      padding: 10px 22px; border: none; border-radius: 8px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+    }
+    .btn-save { background: var(--success); color: #fff; }
+    .btn-save:hover { background: #27ae60; transform: translateY(-1px); }
+    .btn-clear { background: transparent; color: var(--danger); border: 1px solid var(--danger) !important; }
+    .btn-clear:hover { background: var(--danger); color: #fff; }
+    .btn-export { background: var(--action-color); color: #fff; }
+    .btn-export:hover { background: #2980b9; transform: translateY(-1px); }
+    .btn-download { background: #9b59b6; color: #fff; }
+    .btn-download:hover { background: #8e44ad; transform: translateY(-1px); }
+    .btn-collapse {
+      background: transparent; color: var(--text-secondary); border: 1px solid var(--border) !important;
+    }
+    .btn-collapse:hover { border-color: var(--text-secondary) !important; color: var(--text-primary); }
+
+    .save-status {
+      text-align: center; font-size: 0.85rem; color: var(--success);
+      min-height: 20px; margin-bottom: 10px; transition: opacity 0.3s;
+    }
+
+    /* ─── Progress bar ─── */
+    .progress-container {
+      background: var(--bg-card); border-radius: 12px; padding: 18px 24px;
+      margin-bottom: 30px; border: 1px solid var(--border);
+    }
+    .progress-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.85rem; }
+    .progress-header span:first-child { color: var(--text-secondary); }
+    .progress-header span:last-child { color: var(--success); font-weight: 600; }
+    .progress-bar { height: 10px; background: var(--bg-input); border-radius: 5px; overflow: hidden; }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--module1), var(--module4), var(--module7));
+      border-radius: 5px; transition: width 0.5s ease; width: 0%;
+    }
+
+    /* ─── Phase sections ─── */
+    .phase { margin-bottom: 30px; }
+    .phase-header {
+      display: flex; align-items: center; gap: 14px; padding: 16px 22px;
+      border-radius: 14px 14px 0 0; cursor: pointer; user-select: none; transition: background 0.2s;
+    }
+    .phase-header:hover { filter: brightness(1.1); }
+    .phase-header.collapsed { border-radius: 14px; }
+    .phase-badge { font-size: 1.3rem; font-weight: 800; color: #fff; min-width: 80px; }
+    .phase-title { font-size: 1rem; color: #ffffffcc; flex: 1; font-weight: 600; }
+    .phase-count {
+      font-size: 0.8rem; color: #ffffff99; background: #ffffff15; padding: 3px 10px; border-radius: 20px;
+    }
+    .phase-chevron { color: #ffffff88; font-size: 1.2rem; transition: transform 0.3s; }
+    .phase-header.collapsed .phase-chevron { transform: rotate(-90deg); }
+    .phase-body {
+      border: 1px solid var(--border); border-top: none; border-radius: 0 0 14px 14px;
+      overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease;
+    }
+    .phase-body.hidden { max-height: 0 !important; opacity: 0; overflow: hidden; }
+
+    /* ─── Topic rows ─── */
+    .topic-row {
+      display: grid; grid-template-columns: 36px 1fr 1fr; gap: 12px; align-items: start;
+      padding: 14px 20px; background: var(--bg-card); border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    .topic-row:last-child { border-bottom: none; }
+    .topic-row:hover { background: #22224a; }
+    .topic-row.has-link { border-left: 3px solid var(--success); }
+
+    .topic-number {
+      width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: 0.75rem; font-weight: 700; color: #fff;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .topic-info { min-width: 0; }
+    .topic-name { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+    .topic-details { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
+
+    /* ─── Multi-link cell ─── */
+    .links-cell { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+    .link-entry { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .link-entry-number {
+      font-size: 0.7rem; font-weight: 700; color: var(--text-muted); min-width: 18px;
+      text-align: center; flex-shrink: 0;
+    }
+    .link-input {
+      width: 100%; padding: 8px 12px; background: var(--bg-input); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text-primary); font-size: 0.82rem; outline: none;
+      transition: border-color 0.2s; flex: 1; min-width: 0;
+    }
+    .link-input:focus { border-color: var(--action-color); }
+    .link-input.has-value { border-color: var(--success); }
+    .link-input::placeholder { color: var(--text-muted); font-size: 0.78rem; }
+
+    .link-saved { display: none; align-items: center; gap: 8px; min-width: 0; flex: 1; }
+    .link-saved a {
+      color: var(--action-color); font-size: 0.82rem; text-decoration: none; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; font-weight: 500;
+    }
+    .link-saved a:hover { text-decoration: underline; color: #5dade2; }
+    .link-saved .edit-btn { color: var(--text-muted); cursor: pointer; font-size: 0.8rem; flex-shrink: 0; }
+    .link-saved .edit-btn:hover { color: var(--text-primary); }
+
+    .open-btn {
+      padding: 4px 8px; border-radius: 6px; background: var(--action-color); color: #fff; font-size: 0.7rem;
+      font-weight: 600; text-decoration: none; text-align: center; transition: background 0.2s;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .open-btn:hover { background: #2980b9; }
+
+    .remove-link-btn {
+      color: var(--danger); cursor: pointer; font-size: 0.85rem; flex-shrink: 0; background: none;
+      border: none; padding: 2px 4px; opacity: 0.6; transition: opacity 0.2s;
+    }
+    .remove-link-btn:hover { opacity: 1; }
+
+    .add-link-btn {
+      display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px;
+      border: 1px dashed var(--border); border-radius: 8px; background: transparent;
+      color: var(--text-muted); font-size: 0.78rem; cursor: pointer; transition: all 0.2s; align-self: flex-start;
+    }
+    .add-link-btn:hover { border-color: var(--action-color); color: var(--action-color); background: #3498db15; }
+
+    /* ─── Search ─── */
+    .search-box { display: flex; justify-content: center; margin-bottom: 25px; }
+    .search-box input {
+      width: 100%; max-width: 500px; padding: 12px 20px; background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary);
+      font-size: 0.95rem; outline: none; transition: border-color 0.2s;
+    }
+    .search-box input:focus { border-color: var(--action-color); }
+    .search-box input::placeholder { color: var(--text-muted); }
+
+    /* ─── Footer ─── */
+    footer { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.8rem; line-height: 1.6; }
+    footer a { color: var(--action-color); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.6rem; }
+      .topic-row { grid-template-columns: 30px 1fr; gap: 10px; padding: 14px; }
+      .links-cell { grid-column: 1 / -1; }
+      .controls { gap: 8px; }
+      .controls button { padding: 8px 14px; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <a href="index.html" class="back-home">← Back to Home</a>
+  
+  <header>
+    <h1>Low-Latency C++ Series: Feature Deep Dives</h1>
+    <p>
+      An evolving set of in-depth articles, regularly updated to reflect new insights and improvements.<br>
+      Paste your article links next to each topic. All data is saved in your browser's localStorage!
+    </p>
+  </header>
+
+  <!-- Search -->
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="🔍  Search topics... (e.g. Cache, NUMA, Atomics)">
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="btn-save" onclick="saveAll()">
+      💾 Save All Links
+    </button>
+    <button class="btn-export" onclick="exportMarkdown()">
+      📋 Export as Markdown
+    </button>
+    <button class="btn-download" onclick="downloadHTML()">
+      ⬇️ Download Updated HTML
+    </button>
+    <button class="btn-collapse" onclick="toggleAllSections()">
+      ▸ Collapse / Expand All
+    </button>
+    <button class="btn-clear" onclick="clearAll()">
+      🗑️ Clear All Links
+    </button>
+  </div>
+
+  <div class="save-status" id="saveStatus"></div>
+
+  <!-- Progress -->
+  <div class="progress-container">
+    <div class="progress-header">
+      <span>Topics with articles linked</span>
+      <span id="progressText">29 / 29 topics (100%) · 30 total links</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 100%;"></div>
+    </div>
+  </div>
+
+  <!-- Roadmap content injected here -->
+  <div id="roadmap"></div>
+
+  <footer>
+    Low-Latency Engineering Series<br>
+    Data is stored locally in your browser — nothing is sent anywhere.
+  </footer>
+</div>
+
+<script>
+// ─── Preloaded link data (embedded on download) ───
+(function() {
+  const PRELOAD_KEY = "lowlatency_roadmap_links";
+  const embeddedData = {"p1_0":["https://medium.com/@sagar.necindia/cache-warming-prefetching-cpp-performance-guide-68b2f693af56"],"p1_1":["https://medium.com/@sagar.necindia/branch-prediction-compiler-hints-cpp20-cpp23-performance-guide-9e44c24a79f5"],"p1_2":["https://towardsdev.com/branch-prediction-cpp-performance-branchless-programming-bb9d73b01a29"],"p1_3":["https://towardsdev.com/cpp-hardware-performance-pipelines-caches-tlb-1f8493f3273c"],"p2_0":["https://towardsdev.com/cpp-numa-performance-memory-locality-guide-430c6e6d2664"],"p2_1":["https://towardsdev.com/cpp-cpu-affinity-core-pinning-ba6749faaa65"],"p2_2":["https://towardsdev.com/optimize-cpp-performance-ecs-soa-vs-aos-02612ef58797"],"p2_3":["https://towardsdev.com/cpp-data-alignment-guide-cpp11-befa616fc4b5"],"p2_4":["https://towardsdev.com/false-sharing-multithreading-cache-line-performance-dba5de4a567b"],"p3_0":["https://towardsdev.com/cpp-atomic-memory-ordering-explained-2a5a69ed025b"],"p3_1":["https://towardsdev.com/lock-free-programming-in-c-compare-and-swap-without-the-magic-4e8a8f278d90"],"p3_2":["https://towardsdev.com/std-mutex-vs-spinlock-linux-futex-1ffe647643ae"],"p3_3":["https://towardsdev.com/cpp-optimizing-hot-paths-with-thread-local-f7f83f053361"],"p4_0":["https://towardsdev.com/cpp-std-vector-move-vs-copy-noexcept-5fc87a09f6d6"],"p4_1":["https://towardsdev.com/std-flat-map-vs-std-map-performance-5955d73c18fd"],"p4_2":["https://towardsdev.com/cpp-std-function-memory-performance-cost-0e56f23c7c72"],"p4_3":["https://medium.com/@sagar.necindia/crtp-curiously-recurring-template-pattern-in-c-90981941bf38","https://towardsdev.com/cpp23-crtp-deducing-this-simplified-59319dfdd796"],"p4_4":["https://towardsdev.com/c-23-std-mdspan-multidimensional-views-31e98923cea5"],"p4_5":["https://towardsdev.com/consteval-cpp20-guide-6e8175dd4a73"],"p4_6":["https://towardsdev.com/cpp20-std-span-guide-memory-views-8373dc211f6a"],"p4_7":["https://medium.com/@sagar.necindia/cpp-constexpr-evolution-cpp11-to-cpp20-8830aa9a1275"],"p5_0":["https://medium.com/@sagar.necindia/cpp-low-latency-function-optimization-guide-5756407863da"],"p5_1":["https://towardsdev.com/recursion-optimizations-cpp-low-latency-351e409dc06a"],"p5_2":["https://towardsdev.com/cpp-loop-optimization-guide-simd-vectorization-cache-locality-94896f9a1666"],"p5_3":["https://medium.com/@sagar.necindia/high-performance-cpp-20-class-level-optimizations-part-1-d2826e363969"],"p5_4":["https://medium.com/@sagar.necindia/high-performance-c-20-class-level-optimizations-that-actually-matter-part-2-5f18b67527be"],"p6_0":["https://medium.com/towardsdev/linux-perf-cpp-profiling-guide-b214a7371443"],"p6_1":["https://towardsdev.com/what-the-compiler-actually-did-using-assembly-to-understand-c-performance-c094ed4e4f9b"],"p7_0":["https://towardsdev.com/io-uring-vs-epoll-syscall-overhead-linux-performance-a3d7fcc6c9b9"]};
+  if (!localStorage.getItem(PRELOAD_KEY)) {
+    localStorage.setItem(PRELOAD_KEY, JSON.stringify(embeddedData));
+  }
+})();
+
+
+// ─── Preloaded link data (embedded on download) ───
+(function() {
+  const PRELOAD_KEY = "lowlatency_roadmap_links";
+  const embeddedData = {}; // Gets populated dynamically when downloaded
+  if (!localStorage.getItem(PRELOAD_KEY)) {
+    localStorage.setItem(PRELOAD_KEY, JSON.stringify(embeddedData));
+  }
+})();
+
+// ─── Roadmap Data ───
+const roadmap = [
+  {
+    id: "p1",
+    label: "Module 1",
+    color: "var(--module1)",
+    dimColor: "var(--module1-dim)",
+    subtitle: "CPU microarchitecture & execution",
+    topics: [
+      { name: "Low-Latency C++: A Practical Guide to Cache Warming", details: "Deep dive into CPU caches and warming strategies" },
+      { name: "Branch Prediction Compiler Hints", details: "A Practical Guide for C++ Engineers using likely/unlikely" },
+      { name: "Branch Prediction in C++", details: "Why Your CPU Is Guessing (And How to Fix It)" },
+      { name: "C++ and the Hardware Reality", details: "Pipelines, Caches, and TLBs" }
+    ]
+  },
+  {
+    id: "p2",
+    label: "Module 2",
+    color: "var(--module2)",
+    dimColor: "var(--module2-dim)",
+    subtitle: "Memory layout, data-oriented design & ECS",
+    topics: [
+      { name: "Why Your Multi-Threaded C++ Isn’t Scaling", details: "The Brutal Reality of NUMA architecture" },
+      { name: "CPU Affinity (Core Pinning) in C++", details: "Thread Pinning, Cache Locality, and Low-Latency Optimization" },
+      { name: "C++ Performance: OOP vs Cache-Friendly SoA", details: "ECS Benchmarked and Data-Oriented Design" },
+      { name: "Data Alignment in C++", details: "What It Is, Why It Hurts When Ignored, and How to Fix It (C++11/17)" },
+      { name: "False Sharing", details: "The Invisible Bug Killing Thread Performance" }
+    ]
+  },
+  {
+    id: "p3",
+    label: "Module 3",
+    color: "var(--module3)",
+    dimColor: "var(--module3-dim)",
+    subtitle: "Concurrency, atomics, and lock-free programming",
+    topics: [
+      { name: "std::atomic, Explained Properly", details: "Memory Ordering Without the Hand-Waving" },
+      { name: "Lock-Free Programming in C++", details: "Compare-And-Swap Without the Magic" },
+      { name: "Why std::mutex Beats Spinlocks (Even TTAS)", details: "Performance Under Real Contention" },
+      { name: "C++11 thread_local", details: "Stop Allocation Overhead in Hot Paths" }
+    ]
+  },
+  {
+    id: "p4",
+    label: "Module 4",
+    color: "var(--module4)",
+    dimColor: "var(--module4-dim)",
+    subtitle: "Containers, algorithms, views, & compile-time",
+    topics: [
+      { name: "Why std::vector Copies Instead of Moving", details: "Unless You Do This (noexcept & move semantics)" },
+      { name: "C++23 std::flat_map", details: "Performance, Tradeoffs, and Real Benchmarks" },
+      { name: "The Hidden Heap Allocation Inside std::function", details: "What Most Developers Never Notice (Type Erasure)" },
+      { name: "CRTP (Curiously Recurring Template Pattern)", details: "Static polymorphism and devirtualization" },
+      { name: "C++23 std::mdspan", details: "Multidimensional Views, Memory Layout, and Performance" },
+      { name: "consteval in C++20", details: "A Beginner’s Guide to Immediate Functions" },
+      { name: "C++20 std::span", details: "A Modern Guide to Type-Safe Memory Views" },
+      { name: "Evolution of C++ constexpr", details: "From C++11 to C++20 Compile-Time Power" }
+    ]
+  },
+  {
+    id: "p5",
+    label: "Module 5",
+    color: "var(--module5)",
+    dimColor: "var(--module5-dim)",
+    subtitle: "Low-latency software patterns",
+    topics: [
+      { name: "Function Optimizations in C++ for Low-Latency Software", details: "Inlining, calling conventions, and overhead reduction" },
+      { name: "Recursion Optimizations in C++ for Low-Latency Software", details: "Tail call optimization and stack safety" },
+      { name: "Loop Optimizations in C++ for Low-Latency Software", details: "Unrolling, vectorization, and branchless logic" },
+      { name: "High-Performance C++: Class-Level Optimizations (Part-1)", details: "20 memory and layout tricks that actually matter" },
+      { name: "High-Performance C++: Class-Level Optimizations (Part-2)", details: "Advanced class architecture for performance" }
+    ]
+  },
+  {
+    id: "p6",
+    label: "Module 6",
+    color: "var(--module6)",
+    dimColor: "var(--module6-dim)",
+    subtitle: "Profiling and understanding generated code",
+    topics: [
+      { name: "How to Use perf", details: "Find the One Line Killing Your C++ Performance" },
+      { name: "What the Compiler Actually Did", details: "Using Assembly to Understand C++ Performance (Godbolt)" }
+    ]
+  },
+  {
+    id: "p7",
+    label: "Module 7",
+    color: "var(--module7)",
+    dimColor: "var(--module7-dim)",
+    subtitle: "I/O, system calls, and kernel interfaces",
+    topics: [
+      { name: "io_uring", details: "The Linux I/O Interface That Finally Makes Sense" }
+    ]
+  }
+];
+
+// ─── Storage Configuration ───
+const STORAGE_KEY = "lowlatency_roadmap_links";
+let allCollapsed = false;
+
+function loadLinks() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    for (const key in raw) {
+      if (typeof raw[key] === "string") {
+        raw[key] = raw[key].trim() ? [raw[key].trim()] : [];
+      }
+    }
+    return raw;
+  } catch {
+    return {};
+  }
+}
+
+function getTopicKey(phaseId, index) {
+  return `${phaseId}_${index}`;
+}
+
+// ─── Rendering ───
+function renderRoadmap() {
+  const container = document.getElementById("roadmap");
+  const saved = loadLinks();
+  let html = "";
+
+  roadmap.forEach((phase) => {
+    html += `<div class="phase" data-phase="${phase.id}">`;
+
+    html += `
+      <div class="phase-header"
+           style="background: ${phase.dimColor}; border: 1px solid ${phase.color}40;"
+           onclick="togglePhase('${phase.id}')">
+        <span class="phase-badge" style="color: ${phase.color}">
+          ${phase.label}
+        </span>
+        <span class="phase-title">${phase.subtitle}</span>
+        <span class="phase-count">${phase.topics.length} topics</span>
+        <span class="phase-chevron" id="chevron-${phase.id}">▾</span>
+      </div>
+    `;
+
+    html += `<div class="phase-body" id="body-${phase.id}">`;
+
+    phase.topics.forEach((topic, i) => {
+      const key = getTopicKey(phase.id, i);
+      const links = saved[key] || [];
+      const hasLinks = links.length > 0;
+
+      html += `
+        <div class="topic-row ${hasLinks ? "has-link" : ""}"
+             data-key="${key}"
+             data-searchable="${topic.name.toLowerCase()} ${topic.details.toLowerCase()}">
+          <div class="topic-number" style="background: ${phase.color}">
+            ${i + 1}
+          </div>
+          <div class="topic-info">
+            <div class="topic-name">${topic.name}</div>
+            <div class="topic-details">${topic.details}</div>
+          </div>
+          <div class="links-cell" id="links-${key}">
+            ${renderLinksForTopic(key, links)}
+            <button class="add-link-btn" onclick="addLinkSlot('${key}')" title="Add another link">
+              + Add link
+            </button>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `</div></div>`;
+  });
+
+  container.innerHTML = html;
+  updateProgress();
+}
+
+function renderLinksForTopic(key, links) {
+  let html = "";
+  if (links.length === 0) {
+    html += buildLinkEntry(key, 0, "");
+  } else {
+    links.forEach((link, li) => {
+      html += buildLinkEntry(key, li, link);
+    });
+  }
+  return html;
+}
+
+function buildLinkEntry(key, linkIndex, value) {
+  const entryId = `${key}_link${linkIndex}`;
+  const hasValue = value.trim() !== "";
+
+  let html = `<div class="link-entry" id="entry-${entryId}">`;
+  html += `<span class="link-entry-number">${linkIndex + 1}.</span>`;
+
+  // Input field
+  html += `
+    <input type="url" class="link-input ${hasValue ? "has-value" : ""}" id="input-${entryId}"
+      placeholder="Paste article link here..." value="${escapeHtml(value)}"
+      style="${hasValue ? "display:none" : ""}" onchange="onLinkChange('${entryId}')"
+      onkeydown="if(event.key==='Enter'){saveAll()}">
+  `;
+
+  // Saved link display
+  html += `
+    <div class="link-saved" id="saved-${entryId}" style="${hasValue ? "display:flex" : "display:none"}">
+      <a href="${escapeHtml(value)}" target="_blank" id="anchor-${entryId}">${escapeHtml(value)}</a>
+      <span class="edit-btn" onclick="editLink('${entryId}')" title="Edit link">✏️</span>
+    </div>
+  `;
+
+  // Open button
+  html += `
+    <a class="open-btn" id="open-${entryId}" href="${escapeHtml(value)}" target="_blank"
+       style="${hasValue ? "display:inline-block" : "display:none"}">Open ↗</a>
+  `;
+
+  // Remove button
+  html += `
+    <button class="remove-link-btn" onclick="removeLinkSlot('${key}', ${linkIndex})"
+            title="Remove this link">✕</button>
+  </div>`;
+  return html;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ─── Interactions ───
+function onLinkChange(entryId) {
+  const input = document.getElementById(`input-${entryId}`);
+  if (input) input.classList.toggle("has-value", input.value.trim() !== "");
+}
+
+function editLink(entryId) {
+  const input = document.getElementById(`input-${entryId}`);
+  const savedDiv = document.getElementById(`saved-${entryId}`);
+  if (input) input.style.display = "";
+  if (savedDiv) savedDiv.style.display = "none";
+  if (input) {
+    input.focus();
+    input.select();
+  }
+}
+
+function addLinkSlot(key) {
+  const linksCell = document.getElementById(`links-${key}`);
+  const addBtn = linksCell.querySelector(".add-link-btn");
+  const existing = linksCell.querySelectorAll(".link-entry").length;
+  const entryHtml = buildLinkEntry(key, existing, "");
+  addBtn.insertAdjacentHTML("beforebegin", entryHtml);
+  const newInput = document.getElementById(`input-${key}_link${existing}`);
+  if (newInput) newInput.focus();
+}
+
+function removeLinkSlot(key, linkIndex) {
+  const linksCell = document.getElementById(`links-${key}`);
+  const entries = linksCell.querySelectorAll(".link-entry");
+  const values = [];
+
+  entries.forEach((entry, idx) => {
+    const input = entry.querySelector(".link-input");
+    if (input && idx !== linkIndex) {
+      const val = input.value.trim();
+      if (val) values.push(val);
+    } else if (idx !== linkIndex) {
+      const anchor = entry.querySelector(".link-saved a");
+      if (anchor && anchor.href) values.push(anchor.href);
+    }
+  });
+
+  const addBtn = linksCell.querySelector(".add-link-btn");
+  entries.forEach((e) => e.remove());
+
+  const newHtml = renderLinksForTopic(key, values.length > 0 ? values : []);
+  addBtn.insertAdjacentHTML("beforebegin", newHtml);
+
+  const row = linksCell.closest(".topic-row");
+  if (row) row.classList.toggle("has-link", values.length > 0);
+  
+  saveAll();
+}
+
+function saveAll() {
+  const data = {};
+  let topicsWithLinks = 0;
+  let totalLinks = 0;
+
+  roadmap.forEach((phase) => {
+    phase.topics.forEach((_, i) => {
+      const key = getTopicKey(phase.id, i);
+      const linksCell = document.getElementById(`links-${key}`);
+      if (!linksCell) return;
+
+      const entries = linksCell.querySelectorAll(".link-entry");
+      const links = [];
+
+      entries.forEach((entry, li) => {
+        const entryId = `${key}_link${li}`;
+        const input = document.getElementById(`input-${entryId}`);
+        if (!input) return;
+
+        const val = input.value.trim();
+        if (val) {
+          links.push(val);
+          const savedDiv = document.getElementById(`saved-${entryId}`);
+          const anchor = document.getElementById(`anchor-${entryId}`);
+          const openBtn = document.getElementById(`open-${entryId}`);
+
+          input.style.display = "none";
+          input.classList.add("has-value");
+          if (savedDiv) savedDiv.style.display = "flex";
+          if (anchor) { anchor.href = val; anchor.textContent = val; }
+          if (openBtn) { openBtn.href = val; openBtn.style.display = "inline-block"; }
+        } else {
+          const savedDiv = document.getElementById(`saved-${entryId}`);
+          const openBtn = document.getElementById(`open-${entryId}`);
+          input.style.display = "";
+          if (savedDiv) savedDiv.style.display = "none";
+          if (openBtn) openBtn.style.display = "none";
+        }
+      });
+
+      if (links.length > 0) {
+        data[key] = links;
+        topicsWithLinks++;
+        totalLinks += links.length;
+      }
+
+      const row = linksCell.closest(".topic-row");
+      if (row) row.classList.toggle("has-link", links.length > 0);
+    });
+  });
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  updateProgress();
+
+  const status = document.getElementById("saveStatus");
+  status.textContent = `✅ Saved! ${totalLinks} link(s) across ${topicsWithLinks} topic(s) stored.`;
+  setTimeout(() => (status.textContent = ""), 3000);
+}
+
+function clearAll() {
+  if (!confirm("⚠️ This will remove ALL saved links. Are you sure?")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  renderRoadmap();
+  const status = document.getElementById("saveStatus");
+  status.textContent = "🗑️ All links cleared.";
+  setTimeout(() => (status.textContent = ""), 3000);
+}
+
+function togglePhase(phaseId) {
+  const body = document.getElementById(`body-${phaseId}`);
+  const chevron = document.getElementById(`chevron-${phaseId}`);
+  const header = chevron.closest(".phase-header");
+  body.classList.toggle("hidden");
+  header.classList.toggle("collapsed");
+}
+
+function toggleAllSections() {
+  allCollapsed = !allCollapsed;
+  roadmap.forEach((phase) => {
+    const body = document.getElementById(`body-${phase.id}`);
+    const header = document.getElementById(`chevron-${phase.id}`).closest(".phase-header");
+    if (allCollapsed) {
+      body.classList.add("hidden");
+      header.classList.add("collapsed");
+    } else {
+      body.classList.remove("hidden");
+      header.classList.remove("collapsed");
+    }
+  });
+}
+
+function updateProgress() {
+  const saved = loadLinks();
+  let total = 0;
+  let filled = 0;
+  let totalLinks = 0;
+
+  roadmap.forEach((phase) => {
+    phase.topics.forEach((_, i) => {
+      total++;
+      const links = saved[getTopicKey(phase.id, i)] || [];
+      if (links.length > 0) {
+        filled++;
+        totalLinks += links.length;
+      }
+    });
+  });
+
+  const pct = total > 0 ? Math.round((filled / total) * 100) : 0;
+  document.getElementById("progressText").textContent = 
+    `${filled} / ${total} topics (${pct}%) · ${totalLinks} total links`;
+  document.getElementById("progressFill").style.width = `${pct}%`;
+}
+
+// ─── Search / Filter ───
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  const query = e.target.value.toLowerCase().trim();
+  const rows = document.querySelectorAll(".topic-row");
+
+  rows.forEach((row) => {
+    const text = row.getAttribute("data-searchable");
+    row.style.display = !query || text.includes(query) ? "" : "none";
+  });
+
+  if (query) {
+    roadmap.forEach((phase) => {
+      const body = document.getElementById(`body-${phase.id}`);
+      const header = document.getElementById(`chevron-${phase.id}`).closest(".phase-header");
+      body.classList.remove("hidden");
+      header.classList.remove("collapsed");
+    });
+  }
+});
+
+// ─── Export as Markdown ───
+function exportMarkdown() {
+  const saved = loadLinks();
+  let md = "# Low-Latency C++ Series — Reading List\n\n";
+
+  roadmap.forEach((phase) => {
+    md += `## ${phase.label} — ${phase.subtitle}\n\n`;
+    phase.topics.forEach((topic, i) => {
+      const key = getTopicKey(phase.id, i);
+      const links = saved[key] || [];
+      md += `### ${i + 1}. ${topic.name}\n`;
+      md += `> ${topic.details}\n\n`;
+
+      if (links.length > 0) {
+        links.forEach((link, li) => {
+          md += `- [Article ${li + 1}](${link})\n`;
+        });
+      } else {
+        md += `- _not yet added_\n`;
+      }
+      md += "\n";
+    });
+    md += "---\n\n";
+  });
+
+  navigator.clipboard.writeText(md).then(() => {
+    const status = document.getElementById("saveStatus");
+    status.textContent = "📋 Markdown copied to clipboard!";
+    setTimeout(() => (status.textContent = ""), 4000);
+  }).catch(() => {
+    const blob = new Blob([md], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "lowlatency_reading_list.md";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+// ─── Download Updated HTML ───
+function downloadHTML() {
+  saveAll();
+  const saved = loadLinks();
+  const clone = document.documentElement.cloneNode(true);
+  const scriptTags = clone.querySelectorAll("script");
+  const mainScript = scriptTags[scriptTags.length - 1];
+
+  const preloadData = JSON.stringify(saved);
+  const preloadSnippet = 
+    `\n// ─── Preloaded link data (embedded on download) ───\n` +
+    `(function() {\n` +
+    `  const PRELOAD_KEY = "${STORAGE_KEY}";\n` +
+    `  const embeddedData = ${preloadData};\n` +
+    `  if (!localStorage.getItem(PRELOAD_KEY)) {\n` +
+    `    localStorage.setItem(PRELOAD_KEY, JSON.stringify(embeddedData));\n` +
+    `  }\n` +
+    `})();\n\n`;
+
+  mainScript.textContent = preloadSnippet + mainScript.textContent;
+
+  const roadmapDiv = clone.querySelector("#roadmap");
+  if (roadmapDiv) roadmapDiv.innerHTML = "";
+  
+  const saveStatus = clone.querySelector("#saveStatus");
+  if (saveStatus) saveStatus.textContent = "";
+  
+  const searchInput = clone.querySelector("#searchInput");
+  if (searchInput) searchInput.value = "";
+
+  const fullHTML = "<!DOCTYPE html>\n" + clone.outerHTML;
+
+  const blob = new Blob([fullHTML], { type: "text/html;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  
+  const timestamp = new Date().toISOString().slice(0, 10);
+  a.download = `lowlatency_roadmap_${timestamp}.html`;
+  
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  const status = document.getElementById("saveStatus");
+  status.textContent = "⬇️ HTML file downloaded with all your links embedded!";
+  setTimeout(() => (status.textContent = ""), 4000);
+}
+
+// ─── Initialize ───
+renderRoadmap();
+</script>
+
+
+
+</body></html>
