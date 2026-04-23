@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Update Title for the Standard -->
+  <title>C++23 Thematic Roadmap — Reading List</title>
+  <style>
+    :root {
+      /* Background and general colors */
+      --bg-primary: #0f0c29;
+      --bg-secondary: #1a1a3e;
+      --bg-card: #1c1c3a;
+      --bg-input: #12122a;
+      --text-primary: #e0e0e0;
+      --text-secondary: #8899aa;
+      --text-muted: #556677;
+      --border: #2a2a50;
+      --success: #2ecc71;
+
+      /* Original C++ Standard Badge Colors */
+      --cpp11: #00b894;
+      --cpp14: #e67e22;
+      --cpp17: #fdcb6e;
+      --cpp20: #3498db;
+      --cpp23: #9b59b6;
+
+      /* New Thematic Colors */
+      --theme1: #00b894; --theme1-dim: #00b89430;
+      --theme2: #3498db; --theme2-dim: #3498db30;
+      --theme3: #9b59b6; --theme3-dim: #9b59b630;
+      --theme4: #e67e22; --theme4-dim: #e67e2230;
+      --theme5: #fdcb6e; --theme5-dim: #fdcb6e30;
+      --theme6: #e74c3c; --theme6-dim: #e74c3c30;
+      --theme7: #2ecc71; --theme7-dim: #2ecc7130;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(170deg, var(--bg-primary), var(--bg-secondary), var(--bg-primary));
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    /* ─── Header ─── */
+    header { text-align: center; padding: 40px 20px 30px; }
+    header h1 {
+      font-size: 2.2rem;
+      background: linear-gradient(90deg, #00b894, #3498db, #9b59b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+    header p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* ─── Controls bar ─── */
+    .controls {
+      display: flex; justify-content: center; gap: 12px; margin: 20px 0 30px; flex-wrap: wrap;
+    }
+    .controls button {
+      padding: 10px 22px; border: none; border-radius: 8px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+    }
+    .btn-export { background: var(--cpp20); color: #fff; }
+    .btn-export:hover { background: #2980b9; transform: translateY(-1px); }
+    .btn-collapse {
+      background: transparent; color: var(--text-secondary); border: 1px solid var(--border) !important;
+    }
+    .btn-collapse:hover { border-color: var(--text-secondary) !important; color: var(--text-primary); }
+
+    /* ─── Progress bar ─── */
+    .progress-container {
+      background: var(--bg-card); border-radius: 12px; padding: 18px 24px;
+      margin-bottom: 30px; border: 1px solid var(--border);
+    }
+    .progress-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.85rem; }
+    .progress-header span:first-child { color: var(--text-secondary); }
+    .progress-header span:last-child { color: var(--success); font-weight: 600; }
+    .progress-bar { height: 10px; background: var(--bg-input); border-radius: 5px; overflow: hidden; }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cpp11), var(--cpp20), var(--cpp23));
+      border-radius: 5px; transition: width 0.5s ease; width: 0%;
+    }
+
+    /* ─── Phase sections ─── */
+    .phase { margin-bottom: 30px; }
+    .phase-header {
+      display: flex; align-items: center; gap: 14px; padding: 16px 22px;
+      border-radius: 14px 14px 0 0; cursor: pointer; user-select: none; transition: background 0.2s;
+    }
+    .phase-header:hover { filter: brightness(1.1); }
+    .phase-header.collapsed { border-radius: 14px; }
+    .phase-badge { font-size: 1.3rem; font-weight: 800; color: #fff; min-width: 80px; }
+    .phase-title { font-size: 1rem; color: #ffffffcc; flex: 1; }
+    .phase-count {
+      font-size: 0.8rem; color: #ffffff99; background: #ffffff15; padding: 3px 10px; border-radius: 20px;
+    }
+    .phase-chevron { color: #ffffff88; font-size: 1.2rem; transition: transform 0.3s; }
+    .phase-header.collapsed .phase-chevron { transform: rotate(-90deg); }
+    .phase-body {
+      border: 1px solid var(--border); border-top: none; border-radius: 0 0 14px 14px;
+      overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease;
+    }
+    .phase-body.hidden { max-height: 0 !important; opacity: 0; overflow: hidden; }
+
+    /* ─── Topic rows ─── */
+    .topic-row {
+      display: grid; grid-template-columns: 36px 1fr 1fr; gap: 12px; align-items: start;
+      padding: 12px 20px; background: var(--bg-card); border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    .topic-row:last-child { border-bottom: none; }
+    .topic-row:hover { background: #22224a; }
+    .topic-row.has-link { border-left: 3px solid var(--success); }
+
+    .topic-number {
+      width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: 0.75rem; font-weight: 700; color: #fff;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .topic-info { min-width: 0; }
+    .topic-name { font-size: 0.92rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+    .topic-details { font-size: 0.78rem; color: var(--text-muted); line-height: 1.3; }
+
+    /* C++ Version Badge */
+    .std-badge {
+      font-size: 0.65rem; padding: 1px 6px; border-radius: 4px; border: 1px solid currentColor;
+      margin-left: 6px; font-weight: 700; white-space: nowrap; vertical-align: middle;
+    }
+
+    /* ─── Static Links cell ─── */
+    .links-cell { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .link-entry { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .link-entry-number {
+      font-size: 0.7rem; font-weight: 700; color: var(--text-muted); min-width: 18px;
+      text-align: center; flex-shrink: 0;
+    }
+    
+    .link-saved { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
+    .link-saved a {
+      color: var(--cpp20); font-size: 0.82rem; text-decoration: none; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0;
+    }
+    .link-saved a:hover { text-decoration: underline; color: #5dade2; }
+
+    .open-btn {
+      padding: 4px 8px; border-radius: 6px; background: var(--cpp20); color: #fff; font-size: 0.7rem;
+      font-weight: 600; text-decoration: none; text-align: center; transition: background 0.2s;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .open-btn:hover { background: #2980b9; }
+
+    /* ─── Search ─── */
+    .search-box { display: flex; justify-content: center; margin-bottom: 25px; }
+    .search-box input {
+      width: 100%; max-width: 500px; padding: 12px 20px; background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary);
+      font-size: 0.95rem; outline: none; transition: border-color 0.2s;
+    }
+    .search-box input:focus { border-color: var(--cpp20); }
+    .search-box input::placeholder { color: var(--text-muted); }
+
+    /* ─── Footer ─── */
+    footer { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.8rem; line-height: 1.6; }
+    footer a { color: var(--cpp20); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ─── Navigation Link Back to Home ─── */
+    .back-home {
+      display: inline-flex; align-items: center; margin-top: 10px; margin-bottom: 10px;
+      color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; font-weight: 600;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .back-home:hover { color: var(--text-primary); transform: translateX(-4px); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.5rem; }
+      .topic-row { grid-template-columns: 30px 1fr; gap: 8px; padding: 12px 14px; }
+      .links-cell { grid-column: 1 / -1; }
+      .controls { gap: 8px; }
+      .controls button { padding: 8px 14px; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <a href="index.html" class="back-home">&larr; Back to Home</a>
+  
+  <header>
+    <!-- Update H1 for the Standard -->
+    <h1>C++20 Thematic Roadmap</h1>
+    <p>A personal study guide detailing only the specific features introduced in this standard.</p>
+  </header>
+
+  <!-- Search -->
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="🔍  Search topics... (e.g. lambda, threads, memory)">
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="btn-export" onclick="exportMarkdown()">📋 Export as Markdown</button>
+    <button class="btn-collapse" onclick="toggleAllSections()">▸ Collapse / Expand All</button>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-container">
+    <div class="progress-header">
+      <span>Topics with articles linked</span>
+      <span id="progressText">0 / 0 topics (0%) · 0 total links</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+    </div>
+  </div>
+
+  <!-- Roadmap content injected here -->
+  <div id="roadmap"></div>
+
+  <footer>
+    References:
+    <a href="https://cppreference.com" target="_blank">cppreference.com</a> •
+    <a href="https://godbolt.org" target="_blank">godbolt.org</a>
+  </footer>
+</div>
+
+<script>
+// ─── Statically embedded link data (Read-Only) ───
+const savedLinks = {
+  "cpp11_0": ["https://medium.com/@sagar.necindia/auto-keyword-cpp11-6fa48a67b4bf"],
+  "cpp11_1": ["https://medium.com/@sagar.necindia/21b66445c44d?source=friends_link&sk=cf110d066144ba1f1f2163dd3da1de72"],
+  "cpp11_2": ["https://medium.com/@sagar.necindia/92136e37a7c1?source=friends_link&sk=492f9b3235aac18bfd647d8d642b9bee"],
+  "cpp11_3": ["https://medium.com/@sagar.necindia/c-11-initialization-features-modernizing-member-and-brace-initialization-1dd4b2f552fe"],
+  "cpp11_4": ["https://medium.com/@sagar.necindia/c-11-scoped-enum-6943c9c9b7df"],
+  "cpp11_5": ["https://medium.com/@sagar.necindia/740d933bfd8c?source=friends_link&sk=9fe85fef42709278a10300ced7b9f948"],
+  "cpp11_6": [
+    "https://medium.com/@sagar.necindia/c-11-final-keyword-a7b5ea44a5a1",
+    "https://medium.com/@sagar.necindia/c-11-advanced-constructor-features-3ac8bcfa16dc"
+  ],
+  "cpp11_7": [
+    "https://medium.com/@sagar.necindia/move-semantics-rvalues-and-move-constructors-3c5e88c87a21",
+    "https://sagardesd.github.io/Cpp-ebook/move_semantics.html"
+  ],
+  "cpp11_8": ["https://medium.com/@sagar.necindia/move-semantics-rvalues-and-move-constructors-3c5e88c87a21"],
+  "cpp11_9": [
+    "https://medium.com/@sagar.necindia/move-semantics-rvalues-and-move-constructors-3c5e88c87a21",
+    "https://sagardesd.github.io/Cpp-ebook/move_semantics.html"
+  ],
+  "cpp11_10": ["https://medium.com/@sagar.necindia/cpp-forwarding-references-perfect-forwarding-ec7a9285d8b5"],
+  "cpp11_11": ["https://medium.com/@sagar.necindia/cpp-rvo-return-value-optimization-b6f468057298"],
+  "cpp11_12": ["https://medium.com/@sagar.necindia/cpp-rvo-return-value-optimization-b6f468057298"],
+  "cpp11_13": ["https://medium.com/@sagar.necindia/c-11-exclusive-ownership-smart-pointer-std-unique-ptr-t-80d5a91bfc88"],
+  "cpp11_14": [
+    "https://medium.com/@sagar.necindia/c-11-understanding-std-shared-ptr-t-shared-ownership-of-resources-d3e666514e0b",
+    "https://medium.com/@sagar.necindia/std-weak-ptr-t-non-owning-observer-b20c10396888",
+    "https://towardsdev.com/the-secret-constructor-of-std-shared-ptr-that-most-c-developers-dont-know-about-436b78765ae4"
+  ],
+  "cpp11_15": ["https://towardsdev.com/raii-c-way-to-resource-management-22404eb1d9d6"],
+  "cpp11_16": ["https://medium.com/@sagar.necindia/from-specific-to-general-a-guide-to-predicates-functors-and-lambda-functions-in-c-9b4ba2f282dc"],
+  "cpp11_17": ["https://medium.com/@sagar.necindia/from-specific-to-general-a-guide-to-predicates-functors-and-lambda-functions-in-c-9b4ba2f282dc"],
+  "cpp11_18": ["https://medium.com/@sagar.necindia/from-specific-to-general-a-guide-to-predicates-functors-and-lambda-functions-in-c-9b4ba2f282dc"],
+  "cpp11_19": ["https://medium.com/@sagar.necindia/c-11-variadic-templates-6751f81f83cf"],
+  "cpp11_20": ["https://towardsdev.com/cpp-decltype-explained-guide-c389abd7a6ca"],
+  "cpp11_23": [
+    "https://medium.com/@sagar.necindia/constexpr-part-i-the-engine-of-modern-c-meta-programming-d9896938f8ba",
+    "https://medium.com/@sagar.necindia/cpp-constexpr-functions-6b78182e68bc"
+  ],
+  "cpp11_25": ["https://towardsdev.com/cpp-lock-guard-vs-unique-lock-comparison-81e726511af2"],
+  "cpp11_28": [
+    "https://towardsdev.com/cpp-atomic-memory-ordering-explained-2a5a69ed025b",
+    "https://towardsdev.com/atomic-operations-race-conditions-critical-sections-guide-8df00dc28be8"
+  ],
+  "cpp11_29": ["https://towardsdev.com/cpp-atomic-memory-ordering-explained-2a5a69ed025b"],
+  "cpp11_31": ["https://medium.com/@sagar.necindia/cpp11-tuple-tie-cheat-sheet-0b096530f28a?source=friends_link&sk=3e869e1c9c29b46b2243928e4b0ee197"],
+  "cpp11_32": ["https://medium.com/@sagar.necindia/cpp11-std-function-and-std-bind-a-practical-guide-b09a11d6287b?source=friends_link&sk=8efbc103fc4e7fb0d3bbdd826dbb5d04"],
+  "cpp11_35": ["https://sagardesd.github.io/Cpp-ebook/initializer-list.html"],
+  "cpp14_0": ["https://medium.com/@sagar.necindia/from-specific-to-general-a-guide-to-predicates-functors-and-lambda-functions-in-c-9b4ba2f282dc"],
+  "cpp14_1": ["https://medium.com/@sagar.necindia/from-specific-to-general-a-guide-to-predicates-functors-and-lambda-functions-in-c-9b4ba2f282dc"],
+  "cpp14_2": ["https://medium.com/towardsdev/why-std-make-unique-beats-new-in-modern-c-7e2ba653737e"],
+  "cpp14_4": ["https://medium.com/@sagar.necindia/cpp-constexpr-evolution-cpp11-to-cpp20-8830aa9a1275"],
+  "cpp14_5": ["https://medium.com/@sagar.necindia/cpp14-variable-templates-8e320ce87c89?source=friends_link&sk=71aa9ee1b7ba3d2d426177b069b80e03"],
+  "cpp14_6": ["https://medium.com/towardsdev/cpp-decltype-explained-guide-c389abd7a6ca"],
+  "cpp14_7": ["https://medium.com/@sagar.necindia/cpp14-binary-literals-digit-separators-clean-code-0c1fa6c284c6?source=friends_link&sk=033d10dc6a629a697f0cdc99422f9c51"],
+  "cpp14_8": ["https://medium.com/@sagar.necindia/cpp14-shared-timed-mutex-reader-writer-locks-guide-7a416812935e?source=friends_link&sk=4e76d5199a8e10dddfd2e2c4055cf1bc"],
+  "cpp17_1": ["https://medium.com/@sagar.necindia/cpp-if-constexpr-ebe46c3da9cf"],
+  "cpp17_4": ["https://towardsdev.com/cpp-fold-expressions-variadic-templates-da00b3992b1f"],
+  "cpp17_5": ["https://medium.com/@sagar.necindia/from-specific-to-general-a-guide-to-predicates-functors-and-lambda-functions-in-c-9b4ba2f282dc"],
+  "cpp17_6": ["https://medium.com/@sagar.necindia/modern-cpp-attributes-09a7e7ab4253"],
+  "cpp17_7": ["https://medium.com/@sagar.necindia/c-17-understanding-std-optional-t-and-type-safety-in-c-3d496ee195ed"],
+  "cpp17_10": ["https://towardsdev.com/cpp17-string-view-stop-copying-strings-2bf748dc3a12"],
+  "cpp17_12": ["https://medium.com/@sagar.necindia/cpp17-parallel-algorithms-std-execution-deep-dive-6d5ddeff78f5"],
+  "cpp20_0": ["https://towardsdev.com/c-concepts-constraining-templates-c-20-c862f2947c61"],
+  "cpp20_1": ["https://towardsdev.com/c-concepts-constraining-templates-c-20-c862f2947c61"],
+  "cpp20_2": ["https://en.cppreference.com/cpp/concepts"],
+  "cpp20_3": ["https://medium.com/@sagar.necindia/c-20-abbreviated-function-templates-a-modern-approach-to-generic-programming-ff98e4f5316c"],
+  "cpp20_4": ["https://medium.com/@sagar.necindia/cpp20-ranges-deep-dive-core-mechanics-62b6661b2885"],
+  "cpp20_5": ["https://towardsdev.com/cpp20-std-views-guide-ranges-pipelines-a95790b3cd8c"],
+  "cpp20_6": ["https://towardsdev.com/cpp20-std-views-guide-ranges-pipelines-a95790b3cd8c"],
+  "cpp20_7": ["https://towardsdev.com/cpp-sentinels-adl-cpo-guide-8a8499c13720"],
+  "cpp20_8": ["https://towardsdev.com/cpp20-coroutines-demystified-part-1-generator-mental-model-67ace9265be3"],
+  "cpp20_9": ["https://towardsdev.com/cpp20-coroutines-part-2-co-await-task-async-patterns-8e47cc94d49d"],
+  "cpp20_10": ["https://towardsdev.com/cpp20-coroutines-part-2-co-await-task-async-patterns-8e47cc94d49d"],
+  "cpp20_12": ["https://towardsdev.com/cpp20-modules-migration-large-codebases-problems-abb9f8b10d69"],
+  "cpp20_13": ["https://towardsdev.com/cpp20-spaceship-operator-three-way-comparison-b1213302bf93"],
+  "cpp20_14": ["https://medium.com/@sagar.necindia/designated-initialization-in-c-20-making-your-code-self-documenting-99f7920ef140"],
+  "cpp20_15": [
+    "https://towardsdev.com/consteval-cpp20-guide-6e8175dd4a73",
+    "https://medium.com/@sagar.necindia/cpp20-constinit-guide-static-initialization-7f6372d9c928"
+  ],
+  "cpp20_16": ["https://medium.com/@sagar.necindia/cpp-constexpr-evolution-cpp11-to-cpp20-8830aa9a1275"],
+  "cpp20_17": ["https://medium.com/@sagar.necindia/from-specific-to-general-a-guide-to-predicates-functors-and-lambda-functions-in-c-9b4ba2f282dc"],
+  "cpp20_19": ["https://towardsdev.com/cpp20-std-span-guide-memory-views-8373dc211f6a"],
+  "cpp20_20": ["https://towardsdev.com/c-20-std-jthread-the-thread-you-always-wanted-no-more-manual-joins-6a3558ff081e"],
+  "cpp20_23": ["https://towardsdev.com/profiling-cpp20-range-pipelines-source-location-38ad26547eb9"],
+  "cpp20_24": ["https://towardsdev.com/cpp20-bit-header-clean-portable-333de74203f1"],
+  "cpp23_0": ["https://medium.com/@sagar.necindia/b1aad8cec3d1?source=friends_link&sk=4af7eefceef209b06142b5ea76075e49"],
+  "cpp23_1": [
+    "https://towardsdev.com/cpp23-deducing-this-remove-const-ref-overloads-c0736665692b",
+    "https://towardsdev.com/cpp23-recursive-lambdas-deducing-this-fix-cac6c394d540",
+    "https://towardsdev.com/cpp23-crtp-deducing-this-simplified-59319dfdd796"
+  ],
+  "cpp23_2": ["https://medium.com/@sagar.necindia/cpp23-multidimensional-operator-matrix-indexing-0afaac69f818?source=friends_link&sk=9c1176cf4a14077a203fe6c4032a376d"],
+  "cpp23_3": ["https://towardsdev.com/cpp23-static-operator-zero-cost-stateless-functors-performance-2cd676c528a1"],
+  "cpp23_4": ["https://medium.com/@sagar.necindia/fbab65170eb7?source=friends_link&sk=8aa963d8bfbaf58e9232e641ad151876"],
+  "cpp23_5": ["https://towardsdev.com/cpp23-ranges-zip-enumerate-chunk-pipelines-69354b60bca4"],
+  "cpp23_6": ["https://towardsdev.com/cpp23-ranges-zip-enumerate-chunk-pipelines-69354b60bca4"],
+  "cpp23_7": ["https://towardsdev.com/cpp23-ranges-zip-enumerate-chunk-pipelines-69354b60bca4"],
+  "cpp23_8": ["https://towardsdev.com/cpp23-ranges-zip-enumerate-chunk-pipelines-69354b60bca4"],
+  "cpp23_9": ["https://towardsdev.com/cpp23-ranges-zip-enumerate-chunk-pipelines-69354b60bca4"],
+  "cpp23_11": [
+    "https://towardsdev.com/cpp-23-std-expected-tutorial-modern-error-handling-guide-2026-9494ebb44e81",
+    "https://towardsdev.com/cpp23-std-expected-monadic-operation-2c62a2eedbaf"
+  ],
+  "cpp23_12": [
+    "https://towardsdev.com/c-23-std-mdspan-multidimensional-views-31e98923cea5",
+    "https://towardsdev.com/using-std-layout-stride-with-std-mdspan-cpp23-d025aa0c9ac9"
+  ],
+  "cpp23_13": ["https://medium.com/@sagar.necindia/cpp23-std-generator-coroutines-guide-e41383cf7569"],
+  "cpp23_14": ["https://towardsdev.com/std-print-println-guide-322c9917fa56"],
+  "cpp23_15": ["https://towardsdev.com/std-flat-map-vs-std-map-performance-5955d73c18fd"],
+  "cpp23_16": ["https://towardsdev.com/c-23-std-stacktrace-never-debug-blind-again-6625924d520c"],
+  "cpp23_17": ["https://towardsdev.com/std-move-only-function-cpp23-callable-wrapper-no-copy-369e79e5baa0"],
+  "cpp23_18": ["https://medium.com/@sagar.necindia/c-17-understanding-std-optional-t-and-type-safety-in-c-3d496ee195ed"],
+  "cpp23_19": ["https://medium.com/@sagar.necindia/cpp23-std-unreachable-compiler-optimization-1ab0251be605"]
+};
+
+// ─── Thematic Roadmap Data ───
+const roadmap = [
+  {
+    id: "theme1", label: "1. Core Syntax & QoL", subtitle: "The 'New Normal'",
+    color: "var(--theme1)", dimColor: "var(--theme1-dim)",
+    topics: [
+      { id: "cpp11_0", name: "auto Type Deduction", details: "auto, decltype basics", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_1", name: "Range-based for Loops", details: "for (auto& x : container) syntax", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_2", name: "nullptr", details: "Replacing NULL with type-safe nullptr", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_3", name: "Uniform / Brace Initialization", details: "T obj{args}, initializer lists", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_4", name: "Scoped Enums (enum class)", details: "enum class, underlying types", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_5", name: "static_assert", details: "Compile-time assertions", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_6", name: "using Aliases & override / final", details: "Type aliases, function safety", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp14_3", name: "Return Type Deduction", details: "auto return on regular functions", std: "C++14", stdColor: "var(--cpp14)" },
+      { id: "cpp14_6", name: "decltype(auto)", details: "Deducing exact type including references", std: "C++14", stdColor: "var(--cpp14)" },
+      { id: "cpp14_7", name: "Binary Literals & Separators", details: "0b1010, 1'000'000 readability", std: "C++14", stdColor: "var(--cpp14)" },
+      { id: "cpp17_0", name: "Structured Bindings", details: "auto [key, value] = pair;", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp17_2", name: "if / switch with Initializers", details: "if (auto it = m.find(k); it != m.end())", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp17_5", name: "Inline Variables & constexpr Lambdas", details: "inline static, lambdas in constexpr", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp17_6", name: "Nested Namespaces & Attributes", details: "A::B::C, [[nodiscard]], [[maybe_unused]]", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp20_12", name: "Modules", details: "export module, import, header units", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_13", name: "Spaceship Operator (<=>)", details: "Three-way comparison, ordering", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_14", name: "Designated Initializers", details: "Point{.x = 1, .y = 2} — named member init", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_18", name: "std::format", details: "Python-like string formatting", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_23", name: "std::source_location", details: "Replacing __FILE__, __LINE__ macros", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp23_14", name: "std::print / std::println", details: "Modern formatted output (replacing cout)", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_2", name: "Multidimensional operator[]", details: "operator[](int x, int y) — matrix access", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_4", name: "[[assume(expr)]]", details: "Optimizer hints, undefined if false", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_19", name: "Utility Additions", details: "unreachable(), to_underlying, byteswap", std: "C++23", stdColor: "var(--cpp23)" }
+    ]
+  },
+  {
+    id: "theme2", label: "2. Resource Management", subtitle: "The Heart of Modern C++",
+    color: "var(--theme2)", dimColor: "var(--theme2-dim)",
+    topics: [
+      { id: "cpp11_7", name: "Rvalue References (&&)", details: "Lvalue vs rvalue, reference collapsing", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_8", name: "Move Constructors & Assignment", details: "Transferring ownership efficiently", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_9", name: "std::move", details: "Casting to rvalue reference, enabling moves", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_10", name: "Perfect Forwarding & std::forward", details: "Preserving value category", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_11", name: "Rule of Five", details: "Destructor, copy/move constructors, assignments", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_12", name: "Copy Elision / RVO / NRVO", details: "Compiler optimizations avoiding copies", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_13", name: "std::unique_ptr", details: "Exclusive ownership smart pointer", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_14", name: "std::shared_ptr & std::weak_ptr", details: "Shared ownership, breaking circular refs", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_15", name: "RAII Pattern", details: "Resource Acquisition Is Initialization", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp14_2", name: "std::make_unique", details: "Safe unique_ptr creation, no naked new", std: "C++14", stdColor: "var(--cpp14)" }
+    ]
+  },
+  {
+    id: "theme3", label: "3. Functions & Callables", subtitle: "First-Class Functions",
+    color: "var(--theme3)", dimColor: "var(--theme3-dim)",
+    topics: [
+      { id: "cpp11_16", name: "Lambda Expressions — Basics", details: "Syntax, inline function objects", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_17", name: "Lambda Capture Clauses", details: "[=], [&], [this], mixed captures", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_18", name: "Mutable Lambdas & std::function", details: "Modifying captured values", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_32", name: "std::function & std::bind", details: "Type-erased callable wrapper", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp14_0", name: "Generic Lambdas (auto params)", details: "[](auto x) { ... } polymorphic lambdas", std: "C++14", stdColor: "var(--cpp14)" },
+      { id: "cpp14_1", name: "Lambda Init Captures", details: "[x = std::move(y)] generalized captures", std: "C++14", stdColor: "var(--cpp14)" },
+      { id: "cpp17_14", name: "std::invoke / std::apply", details: "Uniform callable invocation, unpacking", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp20_17", name: "Lambda Improvements", details: "Template lambdas, pack captures", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp23_1", name: "Deducing this", details: "Explicit object parameter — CRTP-free mixins", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_3", name: "auto(x) & static operator()", details: "Decay-copy expressions, static operators", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_17", name: "std::move_only_function", details: "Non-copyable callable wrapper", std: "C++23", stdColor: "var(--cpp23)" }
+    ]
+  },
+  {
+    id: "theme4", label: "4. Robust Vocabulary Types", subtitle: "Better Data & Error Handling",
+    color: "var(--theme4)", dimColor: "var(--theme4-dim)",
+    topics: [
+      { id: "cpp11_30", name: "std::array & std::unordered_map/set", details: "Fixed-size array, hash containers", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_31", name: "std::tuple & std::tie", details: "Heterogeneous collection, unpacking", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp17_7", name: "std::optional", details: "Nullable value type", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp17_8", name: "std::variant", details: "Type-safe union, std::visit", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp17_9", name: "std::any", details: "Type-erased single value container", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp17_10", name: "std::string_view", details: "Non-owning string reference, zero-copy", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp17_11", name: "std::filesystem", details: "Paths, directory iteration, file operations", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp17_15", name: "std::byte & Numeric Utilities", details: "clamp, gcd, lcm, from_chars", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp20_25", name: "Container Improvements", details: "erase_if, starts_with, ends_with", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_24", name: "Bit Utilities & <numbers>", details: "bit_cast, popcount, pi, e constants", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp23_11", name: "std::expected<T, E>", details: "Error handling without exceptions", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_15", name: "std::flat_map / std::flat_set", details: "Sorted vector-backed containers", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_16", name: "std::stacktrace", details: "Programmatic stack trace capture", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_18", name: "Monadic std::optional", details: "and_then, transform, or_else", std: "C++23", stdColor: "var(--cpp23)" }
+    ]
+  },
+  {
+    id: "theme5", label: "5. Compile-Time Magic", subtitle: "C++ Metaprogramming",
+    color: "var(--theme5)", dimColor: "var(--theme5-dim)",
+    topics: [
+      { id: "cpp11_20", name: "decltype", details: "Querying expression types at compile time", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_19", name: "Variadic Templates", details: "template<typename... Args>", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_21", name: "SFINAE & std::enable_if", details: "Substitution Failure Is Not An Error", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_22", name: "<type_traits> Library", details: "is_integral, is_same, conditional, etc.", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_23", name: "constexpr (Basics)", details: "Compile-time evaluation of functions", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_35", name: "std::initializer_list & Custom Literals", details: "Brace-init lists, custom suffixes", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp14_4", name: "Relaxed constexpr", details: "Loops, local variables in constexpr", std: "C++14", stdColor: "var(--cpp14)" },
+      { id: "cpp14_5", name: "Variable Templates", details: "template<typename T> constexpr T pi = ...", std: "C++14", stdColor: "var(--cpp14)" },
+      { id: "cpp14_9", name: "std::integer_sequence", details: "Compile-time integer sequences", std: "C++14", stdColor: "var(--cpp14)" },
+      { id: "cpp17_1", name: "if constexpr", details: "Compile-time branching in templates", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp17_3", name: "Class Template Argument Deduction (CTAD)", details: "No explicit template args needed", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp17_4", name: "Fold Expressions", details: "(args + ...) variadic template folding", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp20_0", name: "Concepts — Basics", details: "concept keyword, constraining templates", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_1", name: "requires Clauses & Expressions", details: "requires { expr; }, requirements", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_2", name: "Standard Library Concepts", details: "std::integral, std::ranges::range", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_3", name: "Abbreviated Function Templates", details: "void foo(std::integral auto x)", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_15", name: "consteval & constinit", details: "Immediate functions, guaranteed static init", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_16", name: "Expanded constexpr", details: "constexpr vector, string, virtual, try-catch", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp23_0", name: "if consteval", details: "Detect compile-time vs runtime context", std: "C++23", stdColor: "var(--cpp23)" }
+    ]
+  },
+  {
+    id: "theme6", label: "6. Ranges & Data Pipelines", subtitle: "The STL Revolution",
+    color: "var(--theme6)", dimColor: "var(--theme6-dim)",
+    topics: [
+      { id: "cpp20_4", name: "Ranges — Philosophy & Basics", details: "Lazy evaluation, range adaptors", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_5", name: "Range Views", details: "views::filter, transform, take, drop, reverse", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_6", name: "Pipe Composition & Projections", details: "view1 | view2 | view3, parameters", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_7", name: "Sentinels vs Iterators", details: "Generalized end conditions, subrange", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_19", name: "std::span", details: "Non-owning contiguous view", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp23_5", name: "views::zip & views::zip_transform", details: "Parallel range iteration", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_6", name: "views::chunk & views::chunk_by", details: "Splitting ranges into groups", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_7", name: "views::slide & views::stride", details: "Sliding windows, stepping through ranges", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_8", name: "views::enumerate & views::cartesian_product", details: "Index+value pairs, cross-product", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_9", name: "ranges::to<Container>()", details: "Materialize a view/range into a container", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_10", name: "ranges::fold_left / fold_right", details: "Range-based reduce/accumulate", std: "C++23", stdColor: "var(--cpp23)" },
+      { id: "cpp23_12", name: "std::mdspan", details: "Multidimensional non-owning view", std: "C++23", stdColor: "var(--cpp23)" }
+    ]
+  },
+  {
+    id: "theme7", label: "7. Concurrency & Async", subtitle: "Multithreading & Tasks",
+    color: "var(--theme7)", dimColor: "var(--theme7-dim)",
+    topics: [
+      { id: "cpp11_24", name: "std::thread", details: "Creating and joining threads", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_25", name: "std::mutex & std::lock_guard", details: "Mutual exclusion, RAII locking", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_26", name: "std::condition_variable", details: "Thread synchronization, wait/notify", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_27", name: "std::future, std::promise, std::async", details: "Asynchronous computation results", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_28", name: "std::atomic", details: "Lock-free atomic operations", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_29", name: "Memory Model", details: "acquire, release, seq_cst, happens-before", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_33", name: "std::chrono", details: "Clocks, durations, time points", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp11_34", name: "<random> Library", details: "Engines, distributions, proper RNG", std: "C++11", stdColor: "var(--cpp11)" },
+      { id: "cpp14_8", name: "std::shared_timed_mutex", details: "Reader-writer locks, std::shared_lock", std: "C++14", stdColor: "var(--cpp14)" },
+      { id: "cpp17_12", name: "Parallel Algorithms", details: "std::execution::par, par_unseq, seq", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp17_13", name: "std::scoped_lock & std::shared_mutex", details: "Multi-mutex RAII lock", std: "C++17", stdColor: "var(--cpp17)" },
+      { id: "cpp20_8", name: "Coroutines — Mental Model", details: "Suspension, resumption, lazy computation", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_9", name: "co_await, co_yield, co_return", details: "Core coroutine keywords", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_10", name: "Promise Type & coroutine_handle", details: "Customization machinery for coroutines", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_11", name: "Writing Generators & Async Tasks", details: "Practical coroutine patterns", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_20", name: "std::jthread & stop_token", details: "Auto-joining thread, cancellation", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_21", name: "Latches, Barriers & Semaphores", details: "Thread synchronization primitives", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp20_22", name: "Calendar & Time Zones (chrono)", details: "year_month_day, zoned_time", std: "C++20", stdColor: "var(--cpp20)" },
+      { id: "cpp23_13", name: "std::generator", details: "Standard coroutine generator type", std: "C++23", stdColor: "var(--cpp23)" }
+    ]
+  }
+];
+
+// ─── STANDARD FILTER CONFIGURATION ───
+// The script dynamically filters the roadmap to only display topics matching the target.
+const TARGET_STD = "C++23"; 
+
+// Create a filtered copy by stripping out non-matching topics. 
+// Any themes (phases) that become completely empty are removed.
+const filteredRoadmap = roadmap.map(phase => {
+  return {
+    ...phase,
+    topics: phase.topics.filter(topic => topic.std === TARGET_STD)
+  };
+}).filter(phase => phase.topics.length > 0);
+
+let allCollapsed = false;
+
+// ─── Rendering (Read-Only) ───
+function renderRoadmap() {
+  const container = document.getElementById("roadmap");
+  let html = "";
+
+  filteredRoadmap.forEach((phase) => {
+    html += `<div class="phase" data-phase="${phase.id}">`;
+
+    // Phase header
+    html += `
+      <div class="phase-header"
+           style="background: ${phase.dimColor}; border: 1px solid ${phase.color}40;"
+           onclick="togglePhase('${phase.id}')">
+        <span class="phase-badge" style="color: ${phase.color}">
+          ${phase.label.split('.')[0]}
+        </span>
+        <span class="phase-title">
+          <strong style="color: ${phase.color}">${phase.label.split('.')[1]}</strong> 
+          — ${phase.subtitle}
+        </span>
+        <span class="phase-count">
+          ${phase.topics.length} topics
+        </span>
+        <span class="phase-chevron" id="chevron-${phase.id}">▾</span>
+      </div>
+    `;
+
+    // Phase body
+    html += `<div class="phase-body" id="body-${phase.id}">`;
+
+    phase.topics.forEach((topic, i) => {
+      const key = topic.id; 
+      const links = savedLinks[key] || [];
+      const hasLinks = links.length > 0;
+
+      html += `
+        <div class="topic-row ${hasLinks ? "has-link" : ""}"
+             data-key="${key}"
+             data-searchable="${topic.name.toLowerCase()} ${topic.details.toLowerCase()} ${topic.std.toLowerCase()}">
+          <div class="topic-number" style="background: ${phase.color}">
+            ${i + 1}
+          </div>
+          <div class="topic-info">
+            <div class="topic-name">
+              ${topic.name}
+              <span class="std-badge" style="color: ${topic.stdColor}; 
+                    background: ${topic.stdColor}15; border-color: ${topic.stdColor}80">
+                ${topic.std}
+              </span>
+            </div>
+            <div class="topic-details">
+              ${topic.details}
+            </div>
+          </div>
+          <div class="links-cell">
+            ${renderLinksForTopic(links)}
+          </div>
+        </div>
+      `;
+    });
+
+    html += `</div></div>`;
+  });
+
+  container.innerHTML = html;
+  updateProgress();
+}
+
+function renderLinksForTopic(links) {
+  if (!links || links.length === 0) {
+    return `<span class="empty-links-text" style="color: var(--text-muted); font-size: 0.78rem; font-style: italic;">_No articles linked_</span>`;
+  }
+  
+  let html = "";
+  links.forEach((link, li) => {
+    html += `
+      <div class="link-entry">
+        <span class="link-entry-number">${li + 1}.</span>
+        <div class="link-saved">
+          <a href="${escapeHtml(link)}" target="_blank">${escapeHtml(link)}</a>
+        </div>
+        <a class="open-btn" href="${escapeHtml(link)}" target="_blank" style="display: inline-block;">Open ↗</a>
+      </div>
+    `;
+  });
+  return html;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ─── Interactions ───
+function togglePhase(phaseId) {
+  const body = document.getElementById(`body-${phaseId}`);
+  const chevron = document.getElementById(`chevron-${phaseId}`);
+  const header = chevron.closest(".phase-header");
+  body.classList.toggle("hidden");
+  header.classList.toggle("collapsed");
+}
+
+function toggleAllSections() {
+  allCollapsed = !allCollapsed;
+  filteredRoadmap.forEach((phase) => {
+    const body = document.getElementById(`body-${phase.id}`);
+    const header = document.getElementById(`chevron-${phase.id}`).closest(".phase-header");
+
+    if (allCollapsed) {
+      body.classList.add("hidden");
+      header.classList.add("collapsed");
+    } else {
+      body.classList.remove("hidden");
+      header.classList.remove("collapsed");
+    }
+  });
+}
+
+function updateProgress() {
+  let total = 0;
+  let filled = 0;
+  let totalLinks = 0;
+
+  filteredRoadmap.forEach((phase) => {
+    phase.topics.forEach((topic) => {
+      total++;
+      const links = savedLinks[topic.id] || [];
+      if (links.length > 0) {
+        filled++;
+        totalLinks += links.length;
+      }
+    });
+  });
+
+  const pct = total > 0 ? Math.round((filled / total) * 100) : 0;
+  document.getElementById("progressText").textContent = 
+    `${filled} / ${total} topics (${pct}%) · ${totalLinks} total links`;
+  document.getElementById("progressFill").style.width = `${pct}%`;
+}
+
+// ─── Search / Filter ───
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  const query = e.target.value.toLowerCase().trim();
+  const rows = document.querySelectorAll(".topic-row");
+
+  rows.forEach((row) => {
+    const text = row.getAttribute("data-searchable");
+    row.style.display = !query || text.includes(query) ? "" : "none";
+  });
+
+  if (query) {
+    filteredRoadmap.forEach((phase) => {
+      const body = document.getElementById(`body-${phase.id}`);
+      const header = document.getElementById(`chevron-${phase.id}`).closest(".phase-header");
+      body.classList.remove("hidden");
+      header.classList.remove("collapsed");
+    });
+  }
+});
+
+// ─── Export as Markdown ───
+function exportMarkdown() {
+  let md = `# ${TARGET_STD} Thematic Learning Roadmap — Reading List\n\n`;
+
+  filteredRoadmap.forEach((phase) => {
+    md += `## ${phase.label} — ${phase.subtitle}\n\n`;
+
+    phase.topics.forEach((topic, i) => {
+      const key = topic.id;
+      const links = savedLinks[key] || [];
+      md += `### ${i + 1}. ${topic.name} [${topic.std}]\n`;
+      md += `> ${topic.details}\n\n`;
+
+      if (links.length > 0) {
+        links.forEach((link, li) => {
+          md += `- [Article ${li + 1}](${link})\n`;
+        });
+      } else {
+        md += `- _not yet added_\n`;
+      }
+      md += "\n";
+    });
+
+    md += "---\n\n";
+  });
+
+  navigator.clipboard.writeText(md).then(() => {
+    alert("Markdown copied to clipboard!");
+  }).catch(() => {
+    const blob = new Blob([md], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${TARGET_STD.toLowerCase()}_roadmap.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+// ─── Initialize ───
+renderRoadmap();
+</script>
+</body>
+</html>
