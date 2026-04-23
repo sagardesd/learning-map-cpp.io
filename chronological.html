@@ -377,6 +377,24 @@
     footer a:hover {
       text-decoration: underline;
     }
+    /* ─── Navigation Link Back to Home ─── */
+    .back-home {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .back-home:hover {
+      color: var(--text-primary);
+      /* Nudges the link slightly to the left on hover for a polished feel */
+      transform: translateX(-4px); 
+    }
 
     /* ── Responsive ── */
     @media (max-width: 768px) {
@@ -403,6 +421,10 @@
 <body>
 
 <div class="container">
+  <!-- Navigation Link Back to Home -->
+  <a href="index.html" class="back-home">
+    &larr; Back to Home
+  </a>
   <header>
     <h1>C++ Learning Roadmap — Reading List</h1>
     <p>
