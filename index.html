@@ -20,6 +20,7 @@
       --accent-theme: #9b59b6;
       --accent-ll: #e67e22;
       --accent-arch: #00b894;
+      --accent-basics: #f0a500;
     }
 
     * {
@@ -29,8 +30,12 @@
     }
 
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: linear-gradient(170deg, var(--bg-primary), var(--bg-secondary), var(--bg-primary));
+      font-family: 'Segoe UI', system-ui,
+        -apple-system, sans-serif;
+      background: linear-gradient(
+        170deg, var(--bg-primary),
+        var(--bg-secondary), var(--bg-primary)
+      );
       color: var(--text-primary);
       min-height: 100vh;
       display: flex;
@@ -54,7 +59,9 @@
     .nav-logo {
       font-size: 1.5rem;
       font-weight: 800;
-      background: linear-gradient(90deg, #3498db, #00b894);
+      background: linear-gradient(
+        90deg, #3498db, #00b894
+      );
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-decoration: none;
@@ -85,7 +92,9 @@
       font-size: 3rem;
       line-height: 1.2;
       margin-bottom: 20px;
-      background: linear-gradient(90deg, #00b894, #3498db, #9b59b6);
+      background: linear-gradient(
+        90deg, #00b894, #3498db, #9b59b6
+      );
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -117,7 +126,9 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(
+        auto-fit, minmax(320px, 1fr)
+      );
       gap: 24px;
     }
 
@@ -148,13 +159,26 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 4px;
-      background: var(--card-accent, var(--border));
+      background: var(
+        --card-accent, var(--border)
+      );
     }
 
-    .card.chrono { --card-accent: var(--accent-cpp); }
-    .card.theme { --card-accent: var(--accent-theme); }
-    .card.latency { --card-accent: var(--accent-ll); }
-    .card.arch { --card-accent: var(--accent-arch); }
+    .card.chrono {
+      --card-accent: var(--accent-cpp);
+    }
+    .card.theme {
+      --card-accent: var(--accent-theme);
+    }
+    .card.latency {
+      --card-accent: var(--accent-ll);
+    }
+    .card.arch {
+      --card-accent: var(--accent-arch);
+    }
+    .card.basics {
+      --card-accent: var(--accent-basics);
+    }
 
     .card-badge {
       align-self: flex-start;
@@ -167,8 +191,21 @@
       letter-spacing: 0.5px;
     }
 
-    .badge-active { background: #3498db20; color: #3498db; border: 1px solid #3498db40; }
-    .badge-upcoming { background: #e67e2220; color: #e67e22; border: 1px solid #e67e2240; }
+    .badge-active {
+      background: #3498db20;
+      color: #3498db;
+      border: 1px solid #3498db40;
+    }
+    .badge-upcoming {
+      background: #e67e2220;
+      color: #e67e22;
+      border: 1px solid #e67e2240;
+    }
+    .badge-fundamentals {
+      background: #f0a50020;
+      color: #f0a500;
+      border: 1px solid #f0a50040;
+    }
 
     .card h3 {
       font-size: 1.4rem;
@@ -211,7 +248,7 @@
     @media (max-width: 768px) {
       .hero h1 { font-size: 2.2rem; }
       nav { padding: 15px 20px; }
-      .nav-links { display: none; } /* Hide links on mobile for simplicity */
+      .nav-links { display: none; }
     }
   </style>
 </head>
@@ -222,130 +259,253 @@
     <div class="nav-links">
       <a href="#learning-paths">Learning Paths</a>
       <a href="#low-latency">Low Latency</a>
-      <a href="https://github.com/your-github-username" target="_blank">GitHub</a>
+      <a href="https://github.com/your-github-username"
+         target="_blank">GitHub</a>
     </div>
   </nav>
 
   <!-- Hero Section -->
   <div class="hero">
-    <h1>Mastering Modern C++ & High-Performance Engineering</h1>
+    <h1>
+      Mastering Modern C++ &amp;
+      High-Performance Engineering
+    </h1>
     <p>
-      Welcome to my personal repository of knowledge. Here you will find curated study roadmaps, 
-      deep dives into modern C++ features (C++11 to C++23), and practical guides for 
+      Welcome to my personal repository of knowledge.
+      Here you will find curated study roadmaps,
+      deep dives into modern C++ features
+      (C++11 to C++23), and practical guides for
       building low-latency, mission-critical systems.
     </p>
   </div>
 
   <!-- Main Content Grid -->
   <main>
-    
+
     <!-- Category 1: Roadmaps -->
-    <h2 class="section-title" id="learning-paths">🗺️ C++ Learning Paths</h2>
+    <h2 class="section-title" id="learning-paths">
+      🗺️ C++ Learning Paths
+    </h2>
     <div class="grid">
-      
+
+      <!-- C++ Fundamentals -->
+      <a href="cpp_fundamentals.html"
+         class="card basics">
+        <span class="card-badge badge-fundamentals">
+          Foundation
+        </span>
+        <h3>C++ Fundamentals</h3>
+        <p>
+          Start here. Memory layout, pointers, classes,
+          inheritance, polymorphism, templates, and
+          essential idioms like RAII and value categories
+          — the building blocks you need before diving
+          into modern C++11–C++23 features.
+        </p>
+        <div class="card-footer">
+          View Fundamentals &rarr;
+        </div>
+      </a>
+
       <!-- Chronological Roadmap Link -->
-      <a href="chronological.html" class="card chrono">
-        <span class="card-badge badge-active">Reading List</span>
+      <a href="chronological.html"
+         class="card chrono">
+        <span class="card-badge badge-active">
+          Reading List
+        </span>
         <h3>C++ Chronological Roadmap</h3>
         <p>
-          Trace the exact evolution of the language. A step-by-step reading guide to all 108 
-          major features introduced from C++11 up through C++23.
+          Trace the exact evolution of the language.
+          A step-by-step reading guide to all 108
+          major features introduced from C++11
+          up through C++23.
         </p>
-        <div class="card-footer">View Roadmap &rarr;</div>
+        <div class="card-footer">
+          View Roadmap &rarr;
+        </div>
       </a>
 
       <!-- Thematic Roadmap Link -->
-      <a href="thematic.html" class="card theme">
-        <span class="card-badge badge-active">Reading List</span>
+      <a href="thematic.html"
+         class="card theme">
+        <span class="card-badge badge-active">
+          Reading List
+        </span>
         <h3>C++ Thematic Roadmap</h3>
         <p>
-          The recommended way to learn. Features are grouped into core mental models: 
-          Resource Management, Compile-Time Magic, Ranges, and Concurrency.
+          The recommended way to learn. Features are
+          grouped into core mental models: Resource
+          Management, Compile-Time Magic, Ranges,
+          and Concurrency.
         </p>
-        <div class="card-footer">View Roadmap &rarr;</div>
+        <div class="card-footer">
+          View Roadmap &rarr;
+        </div>
       </a>
-      
+
     </div>
 
     <!-- Category 3: Standard-Specific -->
-    <h2 class="section-title" style="margin-top: 60px;">⚙️ Explore by C++ Standard</h2>
+    <h2 class="section-title"
+        style="margin-top: 60px;">
+      ⚙️ Explore by C++ Standard
+    </h2>
     <div class="grid">
-      <a href="cpp11.html" class="card" style="--card-accent: #00b894;">
-        <span class="card-badge" style="background: #00b89420; color: #00b894; border: 1px solid #00b89440;">C++11</span>
+      <a href="cpp11.html" class="card"
+         style="--card-accent: #00b894;">
+        <span class="card-badge"
+              style="background: #00b89420;
+                     color: #00b894;
+                     border: 1px solid #00b89440;">
+          C++11
+        </span>
         <h3>The Modern Revolution</h3>
-        <p>auto, lambdas, unique_ptr, move semantics, and the thread API.</p>
+        <p>
+          auto, lambdas, unique_ptr, move semantics,
+          and the thread API.
+        </p>
       </a>
 
-      <a href="cpp14.html" class="card" style="--card-accent: #e67e22;">
-        <span class="card-badge" style="background: #e67e2220; color: #e67e22; border: 1px solid #e67e2240;">C++14</span>
+      <a href="cpp14.html" class="card"
+         style="--card-accent: #e67e22;">
+        <span class="card-badge"
+              style="background: #e67e2220;
+                     color: #e67e22;
+                     border: 1px solid #e67e2240;">
+          C++14
+        </span>
         <h3>Quality-of-Life Polish</h3>
-        <p>Generic lambdas, decltype(auto), and make_unique fixes.</p>
+        <p>
+          Generic lambdas, decltype(auto),
+          and make_unique fixes.
+        </p>
       </a>
 
-      <a href="cpp17.html" class="card" style="--card-accent: #fdcb6e;">
-        <span class="card-badge" style="background: #fdcb6e20; color: #fdcb6e; border: 1px solid #fdcb6e40;">C++17</span>
+      <a href="cpp17.html" class="card"
+         style="--card-accent: #fdcb6e;">
+        <span class="card-badge"
+              style="background: #fdcb6e20;
+                     color: #fdcb6e;
+                     border: 1px solid #fdcb6e40;">
+          C++17
+        </span>
         <h3>Major Productivity Boost</h3>
-        <p>Structured bindings, if constexpr, and vocabulary types.</p>
+        <p>
+          Structured bindings, if constexpr,
+          and vocabulary types.
+        </p>
       </a>
 
-      <a href="cpp20.html" class="card" style="--card-accent: #3498db;">
-        <span class="card-badge" style="background: #3498db20; color: #3498db; border: 1px solid #3498db40;">C++20</span>
+      <a href="cpp20.html" class="card"
+         style="--card-accent: #3498db;">
+        <span class="card-badge"
+              style="background: #3498db20;
+                     color: #3498db;
+                     border: 1px solid #3498db40;">
+          C++20
+        </span>
         <h3>The Second Revolution</h3>
-        <p>Concepts, Ranges, Coroutines, Modules, and formatting.</p>
+        <p>
+          Concepts, Ranges, Coroutines, Modules,
+          and formatting.
+        </p>
       </a>
 
-      <a href="cpp23.html" class="card" style="--card-accent: #9b59b6;">
-        <span class="card-badge" style="background: #9b59b620; color: #9b59b6; border: 1px solid #9b59b640;">C++23</span>
-        <h3>Refinement & Completion</h3>
-        <p>Deducing this, std::expected, multi-dim spans, and std::print.</p>
+      <a href="cpp23.html" class="card"
+         style="--card-accent: #9b59b6;">
+        <span class="card-badge"
+              style="background: #9b59b620;
+                     color: #9b59b6;
+                     border: 1px solid #9b59b640;">
+          C++23
+        </span>
+        <h3>Refinement &amp; Completion</h3>
+        <p>
+          Deducing this, std::expected,
+          multi-dim spans, and std::print.
+        </p>
       </a>
     </div>
 
-    <!-- Category 2: Low Latency / Advanced (Future Content) -->
-    <h2 class="section-title" id="low-latency" style="margin-top: 60px;">⚡ Low Latency & Systems Engineering</h2>
+    <!-- Category 2: Low Latency / Advanced -->
+    <h2 class="section-title" id="low-latency"
+        style="margin-top: 60px;">
+      ⚡ Low Latency &amp; Systems Engineering
+    </h2>
     <div class="grid">
-      
-      <!-- New Active Low-Latency Series Link -->
-      <a href="lowlatency.html" class="card latency">
-        <span class="card-badge badge-active">Reading List</span>
+
+      <!-- Active Low-Latency Series Link -->
+      <a href="lowlatency.html"
+         class="card latency">
+        <span class="card-badge badge-active">
+          Reading List
+        </span>
         <h3>Low-Latency C++ Series</h3>
         <p>
-          An evolving set of in-depth articles, regularly updated to reflect new insights and improvements.
+          An evolving set of in-depth articles,
+          regularly updated to reflect new insights
+          and improvements.
         </p>
-        <div class="card-footer">View Series &rarr;</div>
+        <div class="card-footer">
+          View Series &rarr;
+        </div>
       </a>
-      
+
       <!-- Placeholder 1 -->
-      <a href="#" class="card latency" style="cursor: default;">
-        <span class="card-badge badge-upcoming">Coming Soon</span>
+      <a href="#" class="card latency"
+         style="cursor: default;">
+        <span class="card-badge badge-upcoming">
+          Coming Soon
+        </span>
         <h3>Cache-Friendly C++</h3>
         <p>
-          Deep dive into memory hierarchy, cacheline alignment (std::hardware_constructive_interference_size), 
-          false sharing, and writing data-oriented code.
+          Deep dive into memory hierarchy, cacheline
+          alignment
+          (std::hardware_constructive_interference_size),
+          false sharing, and writing
+          data-oriented code.
         </p>
-        <div class="card-footer" style="color: var(--text-muted);">In progress...</div>
+        <div class="card-footer"
+             style="color: var(--text-muted);">
+          In progress...
+        </div>
       </a>
 
       <!-- Placeholder 2 -->
-      <a href="#" class="card arch" style="cursor: default;">
-        <span class="card-badge badge-upcoming">Coming Soon</span>
+      <a href="#" class="card arch"
+         style="cursor: default;">
+        <span class="card-badge badge-upcoming">
+          Coming Soon
+        </span>
         <h3>Lock-Free Concurrency</h3>
         <p>
-          Moving beyond `std::mutex`. Exploring atomic memory orders (acquire/release semantics), 
-          lock-free queues, and minimizing context switches.
+          Moving beyond `std::mutex`. Exploring atomic
+          memory orders (acquire/release semantics),
+          lock-free queues, and minimizing
+          context switches.
         </p>
-        <div class="card-footer" style="color: var(--text-muted);">In progress...</div>
+        <div class="card-footer"
+             style="color: var(--text-muted);">
+          In progress...
+        </div>
       </a>
 
       <!-- Placeholder 3 -->
-      <a href="#" class="card latency" style="cursor: default;">
-        <span class="card-badge badge-upcoming">Coming Soon</span>
+      <a href="#" class="card latency"
+         style="cursor: default;">
+        <span class="card-badge badge-upcoming">
+          Coming Soon
+        </span>
         <h3>Zero-Allocation Strategies</h3>
         <p>
-          Building systems that never call `new` or `malloc` on the critical path. Custom memory 
+          Building systems that never call `new` or
+          `malloc` on the critical path. Custom memory
           arenas, object pools, and bypass strategies.
         </p>
-        <div class="card-footer" style="color: var(--text-muted);">In progress...</div>
+        <div class="card-footer"
+             style="color: var(--text-muted);">
+          In progress...
+        </div>
       </a>
 
     </div>
@@ -354,7 +514,10 @@
 
   <!-- Footer -->
   <footer>
-    <p>&copy; 2026 C++ Learning Blog. Built and hosted with GitHub Pages.</p>
+    <p>
+      &copy; 2026 C++ Learning Blog.
+      Built and hosted with GitHub Pages.
+    </p>
   </footer>
 
 </body>
