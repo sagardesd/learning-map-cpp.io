@@ -15,6 +15,7 @@
       --text-muted: #556677;
       --border: #2a2a50;
 
+      /* Accents */
       --accent-cpp: #3498db;
       --accent-theme: #9b59b6;
       --accent-ll: #e67e22;
@@ -117,13 +118,12 @@
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      cursor: pointer;
     }
     .card:hover {
       transform: translateY(-5px);
       background: var(--bg-card-hover);
       border-color: #4a4a75;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
     .card::before {
       content: '';
@@ -149,10 +149,10 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .badge-active       { background: #3498db20; color: #3498db; border: 1px solid #3498db40; }
-    .badge-upcoming     { background: #e67e2220; color: #e67e22; border: 1px solid #e67e2240; }
-    .badge-fundamentals { background: #f0a50020; color: #f0a500; border: 1px solid #f0a50040; }
-    .badge-compiletime  { background: #0ea5e920; color: #0ea5e9; border: 1px solid #0ea5e940; }
+    .badge-active        { background: #3498db20; color: #3498db; border: 1px solid #3498db40; }
+    .badge-upcoming      { background: #e67e2220; color: #e67e22; border: 1px solid #e67e2240; }
+    .badge-fundamentals  { background: #f0a50020; color: #f0a500; border: 1px solid #f0a50040; }
+    .badge-compiletime   { background: #0ea5e920; color: #0ea5e9; border: 1px solid #0ea5e940; }
 
     .card h3 { font-size: 1.4rem; color: var(--text-primary); margin-bottom: 12px; }
     .card p  { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5; flex: 1; }
@@ -166,80 +166,6 @@
       gap: 5px;
     }
     .card:hover .card-footer { text-decoration: underline; }
-
-    /* ─── Overlay ─── */
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(5px);
-      z-index: 200;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 30px 20px;
-      overflow-y: auto;
-    }
-    .overlay.active { display: flex; }
-
-    .modal {
-      background: #0a1628;
-      border: 1px solid #1a3a5c;
-      border-radius: 16px;
-      width: 100%;
-      max-width: 960px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-      overflow: hidden;
-      position: relative;
-      /* grows to fit injected content */
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Sticky close bar at the top of the modal */
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 24px;
-      border-bottom: 1px solid #1a3a5c;
-      background: #0d2137;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .modal-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      background: linear-gradient(90deg, #38bdf8, #67e8f9);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .modal-close {
-      background: #1a3a5c;
-      border: 1px solid #2a5070;
-      color: #7ab8d9;
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s, color 0.2s;
-      flex-shrink: 0;
-    }
-    .modal-close:hover { background: #0ea5e9; color: #fff; }
-
-    /* Injected compiletime.html content lands here */
-    .modal-body {
-      padding: 0;
-      overflow: visible;
-    }
-
-    /* Hide the "Back to Home" link when rendered inside the modal */
-    .modal-body .back-home { display: none !important; }
 
     /* ─── Footer ─── */
     footer {
@@ -270,20 +196,20 @@
     </div>
   </nav>
 
-  <!-- Hero -->
+  <!-- Hero Section -->
   <div class="hero">
     <h1>Mastering Modern C++ &amp; High-Performance Engineering</h1>
     <p>
       Welcome to my personal repository of knowledge.
       Here you will find curated study roadmaps, deep dives into modern C++ features
-      (C++11 to C++23), and practical guides for building low-latency,
-      mission-critical systems.
+      (C++11 to C++23), and practical guides for building low-latency, mission-critical systems.
     </p>
   </div>
 
-  <!-- Main -->
+  <!-- Main Content -->
   <main>
 
+    <!-- C++ Learning Paths -->
     <h2 class="section-title" id="learning-paths">🗺️ C++ Learning Paths</h2>
     <div class="grid">
 
@@ -292,25 +218,25 @@
         <span class="card-badge badge-fundamentals">Foundation</span>
         <h3>C++ Fundamentals</h3>
         <p>
-          Start here. Memory layout, pointers, classes, inheritance, polymorphism,
-          templates, and essential idioms like RAII and value categories — the building
-          blocks you need before diving into modern C++11–C++23 features.
+          Start here. Memory layout, pointers, classes, inheritance, polymorphism, templates,
+          and essential idioms like RAII and value categories — the building blocks you need
+          before diving into modern C++11–C++23 features.
         </p>
         <div class="card-footer">View Fundamentals &rarr;</div>
       </a>
 
-      <!-- Chronological -->
+      <!-- Chronological Roadmap -->
       <a href="chronological.html" class="card chrono">
         <span class="card-badge badge-active">Reading List</span>
         <h3>C++ Chronological Roadmap</h3>
         <p>
-          Trace the exact evolution of the language. A step-by-step reading guide to
-          all 108 major features introduced from C++11 up through C++23.
+          Trace the exact evolution of the language. A step-by-step reading guide to all 108
+          major features introduced from C++11 up through C++23.
         </p>
         <div class="card-footer">View Roadmap &rarr;</div>
       </a>
 
-      <!-- Thematic -->
+      <!-- Thematic Roadmap -->
       <a href="thematic.html" class="card theme">
         <span class="card-badge badge-active">Reading List</span>
         <h3>C++ Thematic Roadmap</h3>
@@ -321,197 +247,50 @@
         <div class="card-footer">View Roadmap &rarr;</div>
       </a>
 
-      <!-- Compile-Time — triggers modal -->
-      <div class="card compiletime" id="ctCard" onclick="openModal()">
+      <!-- C++ Compile-Time Programming — navigates directly to compiletime.html -->
+      <a href="compiletime.html" class="card compiletime">
         <span class="card-badge badge-compiletime">Reading List</span>
         <h3>C++ Compile-Time Programming</h3>
         <p>
-          Templates, specialization, TMP, variadic templates, fold expressions,
-          constexpr, static_assert, Concepts, CRTP, and every compile-time tool
-          from C++11 to C++23 — all in one focused guide.
+          Templates, specialization, TMP, variadic templates, fold expressions, constexpr,
+          static_assert, Concepts, CRTP, and every compile-time tool from C++11 to C++23 —
+          all in one focused guide.
         </p>
         <div class="card-footer">View Guide &rarr;</div>
-      </div>
+      </a>
 
     </div>
 
     <!-- Explore by Standard -->
-    <h2 class="section-title" style="margin-top:60px;">⚙️ Explore by C++ Standard</h2>
+    <h2 class="section-title" style="margin-top: 60px;">⚙️ Explore by C++ Standard</h2>
     <div class="grid">
 
-      <a href="cpp11.html" class="card" style="--card-accent:#00b894;">
+      <a href="cpp11.html" class="card" style="--card-accent: #00b894;">
         <span class="card-badge"
-          style="background:#00b89420;color:#00b894;border:1px solid #00b89440;">C++11</span>
+              style="background:#00b89420;color:#00b894;border:1px solid #00b89440;">C++11</span>
         <h3>The Modern Revolution</h3>
         <p>auto, lambdas, unique_ptr, move semantics, and the thread API.</p>
       </a>
 
-      <a href="cpp14.html" class="card" style="--card-accent:#e67e22;">
+      <a href="cpp14.html" class="card" style="--card-accent: #e67e22;">
         <span class="card-badge"
-          style="background:#e67e2220;color:#e67e22;border:1px solid #e67e2240;">C++14</span>
+              style="background:#e67e2220;color:#e67e22;border:1px solid #e67e2240;">C++14</span>
         <h3>Quality-of-Life Polish</h3>
         <p>Generic lambdas, decltype(auto), and make_unique fixes.</p>
       </a>
 
-      <a href="cpp17.html" class="card" style="--card-accent:#fdcb6e;">
+      <a href="cpp17.html" class="card" style="--card-accent: #fdcb6e;">
         <span class="card-badge"
-          style="background:#fdcb6e20;color:#fdcb6e;border:1px solid #fdcb6e40;">C++17</span>
+              style="background:#fdcb6e20;color:#fdcb6e;border:1px solid #fdcb6e40;">C++17</span>
         <h3>Major Productivity Boost</h3>
         <p>Structured bindings, if constexpr, and vocabulary types.</p>
       </a>
 
-      <a href="cpp20.html" class="card" style="--card-accent:#3498db;">
+      <a href="cpp20.html" class="card" style="--card-accent: #3498db;">
         <span class="card-badge"
-          style="background:#3498db20;color:#3498db;border:1px solid #3498db40;">C++20</span>
+              style="background:#3498db20;color:#3498db;border:1px solid #3498db40;">C++20</span>
         <h3>The Second Revolution</h3>
         <p>Concepts, Ranges, Coroutines, Modules, and formatting.</p>
       </a>
 
-      <a href="cpp23.html" class="card" style="--card-accent:#9b59b6;">
-        <span class="card-badge"
-          style="background:#9b59b620;color:#9b59b6;border:1px solid #9b59b640;">C++23</span>
-        <h3>Refinement &amp; Completion</h3>
-        <p>Deducing this, std::expected, multi-dim spans, and std::print.</p>
-      </a>
-
-    </div>
-
-    <!-- Low Latency -->
-    <h2 class="section-title" id="low-latency" style="margin-top:60px;">
-      ⚡ Low Latency &amp; Systems Engineering
-    </h2>
-    <div class="grid">
-
-      <a href="lowlatency.html" class="card latency">
-        <span class="card-badge badge-active">Reading List</span>
-        <h3>Low-Latency C++ Series</h3>
-        <p>
-          An evolving set of in-depth articles, regularly updated to reflect
-          new insights and improvements.
-        </p>
-        <div class="card-footer">View Series &rarr;</div>
-      </a>
-
-      <a href="#" class="card latency" style="cursor:default;">
-        <span class="card-badge badge-upcoming">Coming Soon</span>
-        <h3>Cache-Friendly C++</h3>
-        <p>
-          Deep dive into memory hierarchy, cacheline alignment
-          (std::hardware_constructive_interference_size), false sharing,
-          and writing data-oriented code.
-        </p>
-        <div class="card-footer" style="color:var(--text-muted);">In progress...</div>
-      </a>
-
-      <a href="#" class="card arch" style="cursor:default;">
-        <span class="card-badge badge-upcoming">Coming Soon</span>
-        <h3>Lock-Free Concurrency</h3>
-        <p>
-          Moving beyond std::mutex. Exploring atomic memory orders
-          (acquire/release semantics), lock-free queues, and minimizing
-          context switches.
-        </p>
-        <div class="card-footer" style="color:var(--text-muted);">In progress...</div>
-      </a>
-
-      <a href="#" class="card latency" style="cursor:default;">
-        <span class="card-badge badge-upcoming">Coming Soon</span>
-        <h3>Zero-Allocation Strategies</h3>
-        <p>
-          Building systems that never call new or malloc on the critical path.
-          Custom memory arenas, object pools, and bypass strategies.
-        </p>
-        <div class="card-footer" style="color:var(--text-muted);">In progress...</div>
-      </a>
-
-    </div>
-  </main>
-
-  <footer>
-    <p>&copy; 2026 C++ Learning Blog. Built and hosted with GitHub Pages.</p>
-  </footer>
-
-  <!-- ─── Compile-Time Modal ─── -->
-  <div class="overlay" id="ctOverlay" onclick="handleOverlayClick(event)">
-    <div class="modal" id="ctModal">
-      <div class="modal-header">
-        <span class="modal-title">C++ Compile-Time Programming Guide</span>
-        <button class="modal-close" onclick="closeModal()" title="Close">&times;</button>
-      </div>
-      <!-- compiletime.html body content is injected here -->
-      <div class="modal-body" id="ctBody">
-        <p style="padding:40px;text-align:center;color:#7ab8d9;">Loading...</p>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const overlay  = document.getElementById('ctOverlay');
-    const modalBody = document.getElementById('ctBody');
-    let loaded = false;
-
-    function openModal() {
-      if (!loaded) {
-        // Fetch compiletime.html and inject only its <body> content
-        fetch('compiletime.html')
-          .then(res => {
-            if (!res.ok) throw new Error('Could not load compiletime.html');
-            return res.text();
-          })
-          .then(html => {
-            // Parse the fetched HTML and extract everything inside <body>
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-
-            // Grab the body innerHTML
-            const bodyContent = doc.body.innerHTML;
-            modalBody.innerHTML = bodyContent;
-
-            // Re-run any <script> tags that were inside compiletime.html
-            // (DOMParser does not execute scripts automatically)
-            doc.querySelectorAll('script').forEach(oldScript => {
-              const newScript = document.createElement('script');
-              if (oldScript.src) {
-                newScript.src = oldScript.src;
-              } else {
-                newScript.textContent = oldScript.textContent;
-              }
-              document.body.appendChild(newScript);
-            });
-
-            loaded = true;
-          })
-          .catch(err => {
-            modalBody.innerHTML = `
-              <p style="padding:40px;text-align:center;color:#f87171;">
-                ⚠️ Failed to load content: ${err.message}<br>
-                <small style="color:#7ab8d9;">
-                  Make sure you are serving files via a local server
-                  (e.g. <code>npx serve .</code> or VS Code Live Server).
-                </small>
-              </p>`;
-          });
-      }
-
-      overlay.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-      overlay.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    // Close when clicking the dark backdrop
-    function handleOverlayClick(e) {
-      if (e.target === overlay) closeModal();
-    }
-
-    // Close on Escape key
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeModal();
-    });
-  </script>
-
-</body>
-</html>
+      <a href="cpp23.html" class="card" style
