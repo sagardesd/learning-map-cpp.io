@@ -15,6 +15,7 @@
       --text-muted: #556677;
       --border: #2a2a50;
       --success: #2ecc71;
+      --theme-blue: #3498db;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -120,6 +121,7 @@
       font-size: 0.75rem;
       font-weight: 700;
       color: #fff;
+      background: var(--theme-blue);
       flex-shrink: 0;
       margin-top: 2px;
     }
@@ -158,7 +160,7 @@
       flex: 1;
     }
     .link-saved a {
-      color: #3498db;
+      color: var(--theme-blue);
       font-size: 0.85rem;
       text-decoration: none;
       white-space: nowrap;
@@ -174,7 +176,7 @@
     .open-btn {
       padding: 6px 12px;
       border-radius: 6px;
-      background: #3498db;
+      background: var(--theme-blue);
       color: #fff;
       font-size: 0.75rem;
       font-weight: 600;
@@ -206,7 +208,7 @@
       transition: border-color 0.2s;
     }
     .search-box input:focus {
-      border-color: #3498db;
+      border-color: var(--theme-blue);
     }
     .search-box input::placeholder {
       color: var(--text-muted);
@@ -220,7 +222,7 @@
       line-height: 1.6;
     }
     footer a {
-      color: #3498db;
+      color: var(--theme-blue);
       text-decoration: none;
     }
     footer a:hover {
@@ -402,9 +404,6 @@ const topics = [
   }
 ];
 
-// Vibrant colors that match the header gradient and fundamentals theme
-const colors = ['#e74c3c', '#1abc9c', '#3498db', '#9b59b6', '#e67e22'];
-
 function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str;
@@ -419,14 +418,12 @@ function renderList() {
   topics.forEach((topic, index) => {
     const hasLink = topic.link.trim() !== "";
     if (hasLink) linkedCount++;
-    
-    const badgeColor = colors[index % colors.length];
 
     html += `
       <div class="topic-row ${hasLink ? 'has-link' : ''}" 
            data-searchable="${topic.name.toLowerCase()} ${topic.details.toLowerCase()}">
         
-        <div class="topic-number" style="background: ${badgeColor}">
+        <div class="topic-number">
           ${index + 1}
         </div>
         
