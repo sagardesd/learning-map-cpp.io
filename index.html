@@ -293,4 +293,151 @@
         <p>Concepts, Ranges, Coroutines, Modules, and formatting.</p>
       </a>
 
-      <a href="cpp23.html" class="card" style
+      <a href="cpp23.html" class="card" style="--card-accent:#9b59b6;">
+        <span class="card-badge"
+          style="background:#9b59b620;color:#9b59b6;border:1px solid #9b59b640;">C++23</span>
+        <h3>Refinement &amp; Completion</h3>
+        <p>Deducing this, std::expected, multi-dim spans, and std::print.</p>
+      </a>
+
+    </div>
+
+    <!-- Low Latency -->
+    <h2 class="section-title" id="low-latency" style="margin-top:60px;">
+      ⚡ Low Latency &amp; Systems Engineering
+    </h2>
+    <div class="grid">
+
+      <a href="lowlatency.html" class="card latency">
+        <span class="card-badge badge-active">Reading List</span>
+        <h3>Low-Latency C++ Series</h3>
+        <p>
+          An evolving set of in-depth articles, regularly updated to reflect
+          new insights and improvements.
+        </p>
+        <div class="card-footer">View Series &rarr;</div>
+      </a>
+
+      <a href="#" class="card latency" style="cursor:default;">
+        <span class="card-badge badge-upcoming">Coming Soon</span>
+        <h3>Cache-Friendly C++</h3>
+        <p>
+          Deep dive into memory hierarchy, cacheline alignment
+          (std::hardware_constructive_interference_size), false sharing,
+          and writing data-oriented code.
+        </p>
+        <div class="card-footer" style="color:var(--text-muted);">In progress...</div>
+      </a>
+
+      <a href="#" class="card arch" style="cursor:default;">
+        <span class="card-badge badge-upcoming">Coming Soon</span>
+        <h3>Lock-Free Concurrency</h3>
+        <p>
+          Moving beyond std::mutex. Exploring atomic memory orders
+          (acquire/release semantics), lock-free queues, and minimizing
+          context switches.
+        </p>
+        <div class="card-footer" style="color:var(--text-muted);">In progress...</div>
+      </a>
+
+      <a href="#" class="card latency" style="cursor:default;">
+        <span class="card-badge badge-upcoming">Coming Soon</span>
+        <h3>Zero-Allocation Strategies</h3>
+        <p>
+          Building systems that never call new or malloc on the critical path.
+          Custom memory arenas, object pools, and bypass strategies.
+        </p>
+        <div class="card-footer" style="color:var(--text-muted);">In progress...</div>
+      </a>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 C++ Learning Blog. Built and hosted with GitHub Pages.</p>
+  </footer>
+
+  <!-- ─── Compile-Time Modal ─── -->
+  <div class="overlay" id="ctOverlay" onclick="handleOverlayClick(event)">
+    <div class="modal" id="ctModal">
+      <div class="modal-header">
+        <span class="modal-title">C++ Compile-Time Programming Guide</span>
+        <button class="modal-close" onclick="closeModal()" title="Close">&times;</button>
+      </div>
+      <!-- compiletime.html body content is injected here -->
+      <div class="modal-body" id="ctBody">
+        <p style="padding:40px;text-align:center;color:#7ab8d9;">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const overlay  = document.getElementById('ctOverlay');
+    const modalBody = document.getElementById('ctBody');
+    let loaded = false;
+
+    function openModal() {
+      if (!loaded) {
+        // Fetch compiletime.html and inject only its <body> content
+        fetch('compiletime.html')
+          .then(res => {
+            if (!res.ok) throw new Error('Could not load compiletime.html');
+            return res.text();
+          })
+          .then(html => {
+            // Parse the fetched HTML and extract everything inside <body>
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            // Grab the body innerHTML
+            const bodyContent = doc.body.innerHTML;
+            modalBody.innerHTML = bodyContent;
+
+            // Re-run any <script> tags that were inside compiletime.html
+            // (DOMParser does not execute scripts automatically)
+            doc.querySelectorAll('script').forEach(oldScript => {
+              const newScript = document.createElement('script');
+              if (oldScript.src) {
+                newScript.src = oldScript.src;
+              } else {
+                newScript.textContent = oldScript.textContent;
+              }
+              document.body.appendChild(newScript);
+            });
+
+            loaded = true;
+          })
+          .catch(err => {
+            modalBody.innerHTML = `
+              <p style="padding:40px;text-align:center;color:#f87171;">
+                ⚠️ Failed to load content: ${err.message}<br>
+                <small style="color:#7ab8d9;">
+                  Make sure you are serving files via a local server
+                  (e.g. <code>npx serve .</code> or VS Code Live Server).
+                </small>
+              </p>`;
+          });
+      }
+
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close when clicking the dark backdrop
+    function handleOverlayClick(e) {
+      if (e.target === overlay) closeModal();
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+
+</body>
+</html>
