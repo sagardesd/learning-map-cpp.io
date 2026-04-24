@@ -43,35 +43,11 @@
     header p {
       color: var(--text-secondary);
       font-size: 0.95rem;
-      max-width: 700px;
+      max-width: 750px;
       margin: 0 auto;
       line-height: 1.5;
     }
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin: 20px 0 30px;
-      flex-wrap: wrap;
-    }
-    .controls button {
-      padding: 10px 22px;
-      border: none;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .btn-collapse {
-      background: transparent;
-      color: var(--text-secondary);
-      border: 1px solid var(--border) !important;
-    }
-    .btn-collapse:hover {
-      border-color: var(--text-secondary) !important;
-      color: var(--text-primary);
-    }
+    
     .progress-container {
       background: var(--bg-card);
       border-radius: 12px;
@@ -105,67 +81,21 @@
       transition: width 0.5s ease;
       width: 0%;
     }
-    .phase { margin-bottom: 30px; }
-    .phase-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 16px 22px;
-      border-radius: 14px 14px 0 0;
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.2s;
-    }
-    .phase-header:hover {
-      filter: brightness(1.1);
-    }
-    .phase-header.collapsed {
-      border-radius: 14px;
-    }
-    .phase-badge {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: #fff;
-      min-width: 110px;
-    }
-    .phase-title {
-      font-size: 1rem;
-      color: #ffffffcc;
-      flex: 1;
-    }
-    .phase-count {
-      font-size: 0.8rem;
-      color: #ffffff99;
-      background: #ffffff15;
-      padding: 3px 10px;
-      border-radius: 20px;
-    }
-    .phase-chevron {
-      color: #ffffff88;
-      font-size: 1.2rem;
-      transition: transform 0.3s;
-    }
-    .phase-header.collapsed .phase-chevron {
-      transform: rotate(-90deg);
-    }
-    .phase-body {
+
+    .list-wrapper {
       border: 1px solid var(--border);
-      border-top: none;
-      border-radius: 0 0 14px 14px;
+      border-radius: 14px;
       overflow: hidden;
-      transition: max-height 0.4s ease, opacity 0.3s ease;
+      background: var(--bg-card);
+      margin-bottom: 30px;
     }
-    .phase-body.hidden {
-      max-height: 0 !important;
-      opacity: 0;
-      overflow: hidden;
-    }
+
     .topic-row {
       display: grid;
       grid-template-columns: 36px 1fr 1fr;
       gap: 12px;
       align-items: start;
-      padding: 12px 20px;
+      padding: 16px 20px;
       background: var(--bg-card);
       border-bottom: 1px solid var(--border);
       transition: background 0.2s;
@@ -179,6 +109,7 @@
     .topic-row.has-link {
       border-left: 3px solid var(--success);
     }
+    
     .topic-number {
       width: 28px;
       height: 28px;
@@ -192,20 +123,21 @@
       flex-shrink: 0;
       margin-top: 2px;
     }
+    
     .topic-info { min-width: 0; }
     .topic-name {
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       font-weight: 600;
       color: var(--text-primary);
-      margin-bottom: 2px;
+      margin-bottom: 4px;
+      line-height: 1.3;
     }
     .topic-details {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      line-height: 1.4;
     }
+    
     .links-cell {
       display: flex;
       flex-direction: column;
@@ -218,14 +150,6 @@
       gap: 8px;
       min-width: 0;
     }
-    .link-entry-number {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      min-width: 18px;
-      text-align: center;
-      flex-shrink: 0;
-    }
     .link-saved {
       display: flex;
       align-items: center;
@@ -235,7 +159,7 @@
     }
     .link-saved a {
       color: #3498db;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       text-decoration: none;
       white-space: nowrap;
       overflow: hidden;
@@ -248,11 +172,11 @@
       color: #5dade2;
     }
     .open-btn {
-      padding: 4px 8px;
+      padding: 6px 12px;
       border-radius: 6px;
       background: #3498db;
       color: #fff;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 600;
       text-decoration: none;
       text-align: center;
@@ -263,6 +187,7 @@
     .open-btn:hover {
       background: #2980b9;
     }
+
     .search-box {
       display: flex;
       justify-content: center;
@@ -286,9 +211,10 @@
     .search-box input::placeholder {
       color: var(--text-muted);
     }
+    
     footer {
       text-align: center;
-      padding: 40px 20px;
+      padding: 20px 20px 40px;
       color: var(--text-muted);
       font-size: 0.8rem;
       line-height: 1.6;
@@ -300,6 +226,7 @@
     footer a:hover {
       text-decoration: underline;
     }
+    
     .back-home {
       display: inline-flex;
       align-items: center;
@@ -315,20 +242,17 @@
       color: var(--text-primary);
       transform: translateX(-4px);
     }
+    
     @media (max-width: 768px) {
-      header h1 { font-size: 1.5rem; }
+      header h1 { font-size: 1.8rem; }
       .topic-row {
         grid-template-columns: 30px 1fr;
-        gap: 8px;
-        padding: 12px 14px;
+        gap: 12px;
+        padding: 14px;
       }
       .links-cell {
         grid-column: 1 / -1;
-      }
-      .controls { gap: 8px; }
-      .controls button {
-        padding: 8px 14px;
-        font-size: 0.8rem;
+        margin-left: 42px;
       }
     }
   </style>
@@ -345,15 +269,11 @@
       static_assert, Concepts, CRTP, and every compile-time tool from C++11 to C++23.
     </p>
   </header>
+  
   <div class="search-box">
-    <input type="text" id="searchInput"
-      placeholder="🔍  Search topics... (e.g. constexpr, concept, variadic, CRTP)">
+    <input type="text" id="searchInput" placeholder="🔍  Search topics... (e.g. constexpr, concept, variadic, CRTP)">
   </div>
-  <div class="controls">
-    <button class="btn-collapse" onclick="toggleAllSections()">
-      ▸ Collapse / Expand All
-    </button>
-  </div>
+  
   <div class="progress-container">
     <div class="progress-header">
       <span>Topics with articles linked</span>
@@ -363,7 +283,9 @@
       <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
     </div>
   </div>
-  <div id="roadmap"></div>
+  
+  <div class="list-wrapper" id="topicList"></div>
+  
   <footer>
     References:
     <a href="https://cppreference.com" target="_blank">cppreference.com</a> •
@@ -372,241 +294,116 @@
 </div>
 
 <script>
-const savedLinks = {
-  "core_0": ["https://medium.com/@sagar.necindia/cpp-templates-function-and-class-templates-guide-5d97599d3fc4"],
-  "core_1": ["https://medium.com/@sagar.necindia/why-cplusplus-templates-must-be-in-headers-a90b5f785c71"],
-  "core_2": ["https://medium.com/@sagar.necindia/c-function-template-specialization-531ca6f76d1d"],
-  "core_3": ["https://medium.com/@sagar.necindia/c-class-template-specialization-a2d0f6a85105"],
-  
-  "tmp_0": ["https://medium.com/@sagar.necindia/template-meta-programming-tmp-8416ac81b5dd"],
-  "tmp_1": ["https://medium.com/@sagar.necindia/c-11-variadic-templates-6751f81f83cf"],
-  "tmp_2": ["https://towardsdev.com/cpp-fold-expressions-variadic-templates-da00b3992b1f"],
-  
-  "constexpr_0": ["https://medium.com/@sagar.necindia/constexpr-part-i-the-engine-of-modern-c-meta-programming-d9896938f8ba"],
-  "constexpr_1": ["https://medium.com/@sagar.necindia/cpp-constexpr-functions-6b78182e68bc"],
-  "constexpr_2": ["https://medium.com/@sagar.necindia/cpp-constexpr-evolution-cpp11-to-cpp20-8830aa9a1275"],
-  "constexpr_3": ["https://medium.com/@sagar.necindia/cpp-if-constexpr-ebe46c3da9cf"],
-  "constexpr_4": ["https://medium.com/@sagar.necindia/cpp20-constinit-guide-static-initialization-7f6372d9c928"],
-  "constexpr_5": ["https://towardsdev.com/consteval-cpp20-guide-6e8175dd4a73"],
-  "constexpr_6": ["https://medium.com/@sagar.necindia/cpp23-if-consteval-compile-time-vs-runtime-context-b1aad8cec3d1"],
-  
-  "constraints_0": ["https://medium.com/@sagar.necindia/cpp-static-assert-compile-time-validation-guide-740d933bfd8c"],
-  "constraints_1": ["https://medium.com/@sagar.necindia/c-20-abbreviated-function-templates-a-modern-approach-to-generic-programming-ff98e4f5316c"],
-  "constraints_2": ["https://towardsdev.com/c-concepts-constraining-templates-c-20-c862f2947c61"],
-  
-  "patterns_0": ["https://medium.com/@sagar.necindia/crtp-curiously-recurring-template-pattern-in-c-90981941bf38"],
-  "patterns_1": ["https://towardsdev.com/cpp23-crtp-deducing-this-simplified-59319dfdd796"],
-  "patterns_2": ["https://medium.com/@sagar.necindia/cpp23-std-unreachable-compiler-optimization-1ab0251be605"],
-  "patterns_3": ["https://medium.com/@sagar.necindia/c-23s-assume-how-to-tell-compilers-what-you-already-know-fbab65170eb7"]
-};
-
-const roadmap = [
+const topics = [
   {
-    id: "core",
-    label: "Core",
-    color: "#e74c3c",
-    dimColor: "#e74c3c30",
-    subtitle: "Template Foundation — Generic Programming",
-    topics: [
-      {
-        name: "C++ Templates Tutorial",
-        details: "A foundational guide covering how function and class templates work in C++."
-      },
-      {
-        name: "Why Templates Must Be in Headers",
-        details: "Explains the linker mechanics behind template instantiation and .cpp separation errors."
-      },
-      {
-        name: "Function Template Specialization",
-        details: "Covers how to provide custom implementations of function templates for specific types."
-      },
-      {
-        name: "Class Template Specialization",
-        details: "Dives into full and partial class template specialization for tailored data layouts."
-      }
-    ]
+    name: "C++ Templates Tutorial: Function and Class Templates",
+    details: "A foundational guide covering how function and class templates work in C++.",
+    link: "https://medium.com/@sagar.necindia/cpp-templates-function-and-class-templates-guide-5d97599d3fc4"
   },
   {
-    id: "tmp",
-    label: "TMP",
-    color: "#1abc9c",
-    dimColor: "#1abc9c30",
-    subtitle: "Variadic & Metaprogramming",
-    topics: [
-      {
-        name: "Template Metaprogramming (TMP)",
-        details: "Using C++ templates as a compile-time computation engine with type traits."
-      },
-      {
-        name: "C++11 Variadic Templates",
-        details: "Enabling functions and classes to accept any number of template arguments safely."
-      },
-      {
-        name: "C++17 Fold Expressions",
-        details: "A cleaner C++17 syntax for reducing parameter packs and variadic patterns."
-      }
-    ]
+    name: "Why C++ Templates Must Be Defined in Headers",
+    details: "Explains the linker mechanics behind template instantiation and .cpp separation errors.",
+    link: "https://medium.com/@sagar.necindia/why-cplusplus-templates-must-be-in-headers-a90b5f785c71"
   },
   {
-    id: "constexpr",
-    label: "constexpr",
-    color: "#3498db",
-    dimColor: "#3498db30",
-    subtitle: "Compile-Time Execution & Branching",
-    topics: [
-      {
-        name: "constexpr: Modern Metaprogramming",
-        details: "Introduces constexpr as the backbone of modern compile-time programming."
-      },
-      {
-        name: "constexpr Functions Guide",
-        details: "A practical guide to writing constexpr functions that execute at compile time."
-      },
-      {
-        name: "Evolution of constexpr",
-        details: "Traces the progression of constexpr from its limited C++11 form to powerful C++20."
-      },
-      {
-        name: "if constexpr: Branching in C++17",
-        details: "Discarding branches at compile time inside templates for cleaner type dispatch."
-      },
-      {
-        name: "constinit vs constexpr",
-        details: "Solving the static initialization fiasco in C++20 with constinit."
-      },
-      {
-        name: "consteval in C++20",
-        details: "Forcing immediate functions to always execute at compile time."
-      },
-      {
-        name: "C++23 if consteval",
-        details: "Detecting Compile-Time vs Runtime Context within a single function."
-      }
-    ]
+    name: "C++ Function Template Specialization",
+    details: "Covers how to provide custom implementations of function templates for specific types.",
+    link: "https://medium.com/@sagar.necindia/c-function-template-specialization-531ca6f76d1d"
   },
   {
-    id: "constraints",
-    label: "Constraints",
-    color: "#9b59b6",
-    dimColor: "#9b59b630",
-    subtitle: "Compile-Time Assertions & Concepts",
-    topics: [
-      {
-        name: "static_assert: Validation Guide",
-        details: "Enforcing compile-time constraints on template parameters and program logic."
-      },
-      {
-        name: "C++20 Abbreviated Function Templates",
-        details: "A modern approach to generic programming using auto parameters."
-      },
-      {
-        name: "C++20 Concepts",
-        details: "A first-class way to constrain template parameters and produce clearer errors."
-      }
-    ]
+    name: "C++ Class Template Specialization",
+    details: "Dives into full and partial class template specialization for tailored data layouts.",
+    link: "https://medium.com/@sagar.necindia/c-class-template-specialization-a2d0f6a85105"
   },
   {
-    id: "patterns",
-    label: "Patterns",
-    color: "#e67e22",
-    dimColor: "#e67e2230",
-    subtitle: "Static Polymorphism & Compiler Hints",
-    topics: [
-      {
-        name: "CRTP Explained",
-        details: "Curiously Recurring Template Pattern for zero-overhead static polymorphism."
-      },
-      {
-        name: "From CRTP to Deducing this",
-        details: "How C++23's 'deducing this' finally makes static polymorphism readable."
-      },
-      {
-        name: "C++23 std::unreachable()",
-        details: "The feature that lets you talk to the optimizer and eliminate dead code."
-      },
-      {
-        name: "C++23's [[assume]]",
-        details: "Telling compilers what you already know about program state for better optimization."
-      }
-    ]
+    name: "Template Metaprogramming (TMP)",
+    details: "Using C++ templates as a compile-time computation engine with type traits.",
+    link: "https://medium.com/@sagar.necindia/template-meta-programming-tmp-8416ac81b5dd"
+  },
+  {
+    name: "C++11 Variadic Templates",
+    details: "Enabling functions and classes to accept any number of template arguments safely.",
+    link: "https://medium.com/@sagar.necindia/c-11-variadic-templates-6751f81f83cf"
+  },
+  {
+    name: "C++17 Fold Expressions",
+    details: "A cleaner C++17 syntax for reducing parameter packs and variadic patterns.",
+    link: "https://towardsdev.com/cpp-fold-expressions-variadic-templates-da00b3992b1f"
+  },
+  {
+    name: "constexpr: Modern Metaprogramming",
+    details: "Introduces constexpr as the backbone of modern compile-time programming.",
+    link: "https://medium.com/@sagar.necindia/constexpr-part-i-the-engine-of-modern-c-meta-programming-d9896938f8ba"
+  },
+  {
+    name: "C++ constexpr Functions Guide",
+    details: "A practical guide to writing constexpr functions that execute at compile time.",
+    link: "https://medium.com/@sagar.necindia/cpp-constexpr-functions-6b78182e68bc"
+  },
+  {
+    name: "Evolution of constexpr",
+    details: "Traces the progression of constexpr from its limited C++11 form to powerful C++20.",
+    link: "https://medium.com/@sagar.necindia/cpp-constexpr-evolution-cpp11-to-cpp20-8830aa9a1275"
+  },
+  {
+    name: "static_assert: Validation Guide",
+    details: "Enforcing compile-time constraints on template parameters and program logic.",
+    link: "https://medium.com/@sagar.necindia/cpp-static-assert-compile-time-validation-guide-740d933bfd8c"
+  },
+  {
+    name: "if constexpr: Branching in C++17",
+    details: "Discarding branches at compile time inside templates for cleaner type dispatch.",
+    link: "https://medium.com/@sagar.necindia/cpp-if-constexpr-ebe46c3da9cf"
+  },
+  {
+    name: "C++20 Abbreviated Function Templates",
+    details: "A modern approach to generic programming using auto parameters.",
+    link: "https://medium.com/@sagar.necindia/c-20-abbreviated-function-templates-a-modern-approach-to-generic-programming-ff98e4f5316c"
+  },
+  {
+    name: "C++20 Concepts",
+    details: "A first-class way to constrain template parameters and produce clearer errors.",
+    link: "https://towardsdev.com/c-concepts-constraining-templates-c-20-c862f2947c61"
+  },
+  {
+    name: "constinit vs constexpr",
+    details: "Solving the static initialization fiasco in C++20 with constinit.",
+    link: "https://medium.com/@sagar.necindia/cpp20-constinit-guide-static-initialization-7f6372d9c928"
+  },
+  {
+    name: "consteval in C++20",
+    details: "Forcing immediate functions to always execute at compile time.",
+    link: "https://towardsdev.com/consteval-cpp20-guide-6e8175dd4a73"
+  },
+  {
+    name: "CRTP Explained",
+    details: "Curiously Recurring Template Pattern for zero-overhead static polymorphism.",
+    link: "https://medium.com/@sagar.necindia/crtp-curiously-recurring-template-pattern-in-c-90981941bf38"
+  },
+  {
+    name: "From CRTP to Deducing this",
+    details: "How C++23's 'deducing this' finally makes static polymorphism readable.",
+    link: "https://towardsdev.com/cpp23-crtp-deducing-this-simplified-59319dfdd796"
+  },
+  {
+    name: "C++23 if consteval",
+    details: "Detecting Compile-Time vs Runtime Context within a single function.",
+    link: "https://medium.com/@sagar.necindia/cpp23-if-consteval-compile-time-vs-runtime-context-b1aad8cec3d1"
+  },
+  {
+    name: "C++23 std::unreachable()",
+    details: "The feature that lets you talk to the optimizer and eliminate dead code.",
+    link: "https://medium.com/@sagar.necindia/cpp23-std-unreachable-compiler-optimization-1ab0251be605"
+  },
+  {
+    name: "C++23's [[assume]]",
+    details: "Telling compilers what you already know about program state for better optimization.",
+    link: "https://medium.com/@sagar.necindia/c-23s-assume-how-to-tell-compilers-what-you-already-know-fbab65170eb7"
   }
 ];
 
-let allCollapsed = false;
-
-function getTopicKey(phaseId, index) {
-  return `${phaseId}_${index}`;
-}
-
-function renderRoadmap() {
-  const container = document.getElementById("roadmap");
-  let html = "";
-
-  roadmap.forEach((phase) => {
-    html += `<div class="phase" data-phase="${phase.id}">`;
-    html += `
-      <div class="phase-header"
-           style="background: ${phase.dimColor}; border: 1px solid ${phase.color}40;"
-           onclick="togglePhase('${phase.id}')">
-        <span class="phase-badge" style="color: ${phase.color}">${phase.label}</span>
-        <span class="phase-title">${phase.subtitle}</span>
-        <span class="phase-count">${phase.topics.length} topics</span>
-        <span class="phase-chevron" id="chevron-${phase.id}">▾</span>
-      </div>
-    `;
-
-    html += `<div class="phase-body" id="body-${phase.id}">`;
-
-    phase.topics.forEach((topic, i) => {
-      const key = getTopicKey(phase.id, i);
-      const links = savedLinks[key] || [];
-      const hasLinks = links.length > 0;
-
-      html += `
-        <div class="topic-row ${hasLinks ? "has-link" : ""}"
-             data-key="${key}"
-             data-searchable="${topic.name.toLowerCase()} ${topic.details.toLowerCase()}">
-          <div class="topic-number" style="background: ${phase.color}">
-            ${i + 1}
-          </div>
-          <div class="topic-info">
-            <div class="topic-name">${topic.name}</div>
-            <div class="topic-details">${topic.details}</div>
-          </div>
-          <div class="links-cell">
-            ${renderLinksForTopic(links)}
-          </div>
-        </div>
-      `;
-    });
-
-    html += `</div></div>`;
-  });
-
-  container.innerHTML = html;
-  updateProgress();
-}
-
-function renderLinksForTopic(links) {
-  if (!links || links.length === 0) {
-    return `<span style="color: var(--text-muted); font-size: 0.78rem; font-style: italic;">No articles linked yet</span>`;
-  }
-
-  let html = "";
-  links.forEach((link, li) => {
-    html += `
-      <div class="link-entry">
-        <span class="link-entry-number">${li + 1}.</span>
-        <div class="link-saved">
-          <a href="${escapeHtml(link)}" target="_blank">${escapeHtml(link)}</a>
-        </div>
-        <a class="open-btn" href="${escapeHtml(link)}" target="_blank">Open ↗</a>
-      </div>
-    `;
-  });
-
-  return html;
-}
+// Vibrant colors that match the header gradient and fundamentals theme
+const colors = ['#e74c3c', '#1abc9c', '#3498db', '#9b59b6', '#e67e22'];
 
 function escapeHtml(str) {
   const div = document.createElement("div");
@@ -614,54 +411,57 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-function togglePhase(phaseId) {
-  const body = document.getElementById(`body-${phaseId}`);
-  const chevron = document.getElementById(`chevron-${phaseId}`);
-  const header = chevron.closest(".phase-header");
+function renderList() {
+  const container = document.getElementById("topicList");
+  let html = "";
+  let linkedCount = 0;
 
-  body.classList.toggle("hidden");
-  header.classList.toggle("collapsed");
-}
+  topics.forEach((topic, index) => {
+    const hasLink = topic.link.trim() !== "";
+    if (hasLink) linkedCount++;
+    
+    const badgeColor = colors[index % colors.length];
 
-function toggleAllSections() {
-  allCollapsed = !allCollapsed;
-  roadmap.forEach((phase) => {
-    const body = document.getElementById(`body-${phase.id}`);
-    const chevron = document.getElementById(`chevron-${phase.id}`);
-    const header = chevron.closest(".phase-header");
-
-    if (allCollapsed) {
-      body.classList.add("hidden");
-      header.classList.add("collapsed");
-    } else {
-      body.classList.remove("hidden");
-      header.classList.remove("collapsed");
-    }
+    html += `
+      <div class="topic-row ${hasLink ? 'has-link' : ''}" 
+           data-searchable="${topic.name.toLowerCase()} ${topic.details.toLowerCase()}">
+        
+        <div class="topic-number" style="background: ${badgeColor}">
+          ${index + 1}
+        </div>
+        
+        <div class="topic-info">
+          <div class="topic-name">${topic.name}</div>
+          <div class="topic-details">${topic.details}</div>
+        </div>
+        
+        <div class="links-cell">
+          ${hasLink ? `
+            <div class="link-entry">
+              <div class="link-saved">
+                <a href="${escapeHtml(topic.link)}" target="_blank">${escapeHtml(topic.link)}</a>
+              </div>
+              <a class="open-btn" href="${escapeHtml(topic.link)}" target="_blank">Open ↗</a>
+            </div>
+          ` : `
+            <span style="color: var(--text-muted); font-size: 0.8rem; font-style: italic; margin-top: 4px;">
+              No article linked yet
+            </span>
+          `}
+        </div>
+      </div>
+    `;
   });
-}
 
-function updateProgress() {
-  let total = 0;
-  let filled = 0;
-  let totalLinks = 0;
+  container.innerHTML = html;
 
-  roadmap.forEach((phase) => {
-    phase.topics.forEach((_, i) => {
-      total++;
-      const key = getTopicKey(phase.id, i);
-      const links = savedLinks[key] || [];
-      if (links.length > 0) {
-        filled++;
-        totalLinks += links.length;
-      }
-    });
-  });
-
-  const pct = total > 0 ? Math.round((filled / total) * 100) : 0;
-  document.getElementById("progressText").textContent = `${filled} / ${total} topics (${pct}%) · ${totalLinks} total links`;
+  // Update progress
+  const pct = topics.length > 0 ? Math.round((linkedCount / topics.length) * 100) : 0;
+  document.getElementById("progressText").textContent = `${linkedCount} / ${topics.length} topics (${pct}%)`;
   document.getElementById("progressFill").style.width = `${pct}%`;
 }
 
+// Search functionality
 document.getElementById("searchInput").addEventListener("input", (e) => {
   const query = e.target.value.toLowerCase().trim();
   const rows = document.querySelectorAll(".topic-row");
@@ -670,18 +470,9 @@ document.getElementById("searchInput").addEventListener("input", (e) => {
     const text = row.getAttribute("data-searchable");
     row.style.display = !query || text.includes(query) ? "" : "none";
   });
-
-  if (query) {
-    roadmap.forEach((phase) => {
-      const body = document.getElementById(`body-${phase.id}`);
-      const header = document.getElementById(`chevron-${phase.id}`).closest(".phase-header");
-      body.classList.remove("hidden");
-      header.classList.remove("collapsed");
-    });
-  }
 });
 
-renderRoadmap();
+renderList();
 </script>
 </body>
 </html>
